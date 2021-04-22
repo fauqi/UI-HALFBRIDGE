@@ -65,8 +65,7 @@ class page:
         for x in range(4):
             for y in range(4):    
                 self.entry[x][y] = Entry(self.frame2,font=20)
-        self.entry[3][2].destroy()
-        self.entry[3][3].destroy()
+
 
 
     def showLayar(self):
@@ -84,16 +83,20 @@ class page:
         self.calculateBtn.place(x=self.sW*0.774,y=self.sH*0.39,width=self.sW*0.132, height=self.sH*0.06)
         self.resetBtn.place(x=self.sW*0.774,y=self.sH*0.47,width=self.sW*0.132, height=self.sH*0.06)
         #elf.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
-
+        j=0
+        k=0
         offsetH=self.sH*0.2128
         offsetW=self.sW*0.181
         jarakW=self.sW*0.141
         jarakH=self.sH*0.0449
         entryWidth=self.sW*0.065
         entryHeight=self.sH*0.044
-        # for j in range(4):
-        #     for k in range(4):    
-        #         self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
+        
+        for j in range(4):
+            for k in range(4):    
+                self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
+        self.entry[3][2].place_forget()
+        self.entry[3][3].place_forget()
     def back(self):
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
