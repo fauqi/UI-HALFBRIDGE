@@ -91,9 +91,9 @@ class page:
         jarakH=self.sH*0.0449
         entryWidth=self.sW*0.065
         entryHeight=self.sH*0.044
-        for j in range(4):
-            for k in range(4):    
-                self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
+        # for j in range(4):
+        #     for k in range(4):    
+        #         self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
     def back(self):
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
