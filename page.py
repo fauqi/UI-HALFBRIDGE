@@ -97,15 +97,21 @@ class page:
                 self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
         self.entry[3][2].place_forget()
         self.entry[3][3].place_forget()
+        
     def back(self):
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
     def calculate(self):
         try:
-            a=float(self.entry[0][0].get())
-            print(a)
+            self.hitung()
+            
         except:
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
+
+    def hitung(self):
+        vinMax=float(self.entry[0][0].get())
+        voutMax=float(self.entry[0][1].get())
+        print(str(vinMax)+str(voutMax))
         
 screen = page(root)
 root.mainloop()
