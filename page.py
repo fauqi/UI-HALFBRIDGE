@@ -34,12 +34,26 @@ class page:
         self.page_init()
         self.showLayar()
     def page_init(self):
-        self.photo=Image.open("awal.png")
+        self.photo=Image.open("foto/awal.png")
         self.photo = self.photo.resize((self.sW, self.sH), Image.ANTIALIAS)
         self.gambar = ImageTk.PhotoImage(self.photo)
+        self.photo2=Image.open("foto/tab2.png")
+        self.photo2 = self.photo2.resize((self.sW, self.sH), Image.ANTIALIAS)
+        self.gambar2 = ImageTk.PhotoImage(self.photo2)
+        self.photo3=Image.open("foto/back.png")
+        self.photo3 = self.photo3.resize((int(self.sW*0.032), int(self.sH*0.06)), Image.ANTIALIAS)
+        self.backImage = ImageTk.PhotoImage(self.photo3)
+        
+
         self.labelImage=Label(self.frame,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar)
+        self.labelImage2=Label(self.frame2,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar2)
         self.exitButton = Button(self.frame,command=self.exit,bg="#9561EB",text="EXIT",font='Helvetica 30 bold')
         self.startButton = Button(self.frame,command=self.start,bg="#EF5858",text="START",font='Helvetica 30 bold')
+        self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
+
+
+
+
     def showLayar(self):
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         self.labelImage.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
@@ -50,6 +64,11 @@ class page:
     def start(self):
         self.frame.place_forget()
         self.frame2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+        self.labelImage2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+        self.backBtn.place(x=self.sW*0,y=self.sH*0,width=self.sW*0.032, height=self.sH*0.06)
+    def back(self):
+        self.frame2.place_forget()
+        self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         
 screen = page(root)
 root.mainloop()
