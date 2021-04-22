@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
-
+from tkinter import messagebox
 root=Tk()
 SCREENWIDTH = root.winfo_screenwidth()
 SCREENHEIGHT = root.winfo_screenheight()
@@ -31,8 +31,10 @@ class page:
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="RED")
         self.frame2=Frame(self.master,bg="RED")
+        self.entry =[[0 for x in range(3)]  for x in range(3)]
         self.page_init()
         self.showLayar()
+        
     def page_init(self):
         self.photo=Image.open("foto/awal.png")
         self.photo = self.photo.resize((self.sW, self.sH), Image.ANTIALIAS)
@@ -43,6 +45,12 @@ class page:
         self.photo3=Image.open("foto/back.png")
         self.photo3 = self.photo3.resize((int(self.sW*0.032), int(self.sH*0.06)), Image.ANTIALIAS)
         self.backImage = ImageTk.PhotoImage(self.photo3)
+        self.photo4=Image.open("foto/calculate.png")
+        self.photo4 = self.photo4.resize((int(self.sW*0.132), int(self.sH*0.06)), Image.ANTIALIAS)
+        self.calculateImage = ImageTk.PhotoImage(self.photo4)
+        self.photo5=Image.open("foto/reset.png")
+        self.photo5 = self.photo5.resize((int(self.sW*0.132), int(self.sH*0.06)), Image.ANTIALIAS)
+        self.resetImage = ImageTk.PhotoImage(self.photo5)
         
 
         self.labelImage=Label(self.frame,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar)
@@ -50,8 +58,10 @@ class page:
         self.exitButton = Button(self.frame,command=self.exit,bg="#9561EB",text="EXIT",font='Helvetica 30 bold')
         self.startButton = Button(self.frame,command=self.start,bg="#EF5858",text="START",font='Helvetica 30 bold')
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
+        self.calculateBtn=Button(self.frame2,image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
+        self.resetBtn=Button(self.frame2,image=self.resetImage,command=self.calculate,borderwidth=0,bg="#67B840")
 
-
+        self.entry[0][0]=Entry(self.frame2,font=20)
 
 
     def showLayar(self):
@@ -65,10 +75,19 @@ class page:
         self.frame.place_forget()
         self.frame2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         self.labelImage2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
-        self.backBtn.place(x=self.sW*0,y=self.sH*0,width=self.sW*0.032, height=self.sH*0.06)
+        self.backBtn.place(x=self.sW*0.01,y=self.sH*0.02,width=self.sW*0.032, height=self.sH*0.06)
+        self.calculateBtn.place(x=self.sW*0.774,y=self.sH*0.39,width=self.sW*0.132, height=self.sH*0.06)
+        self.resetBtn.place(x=self.sW*0.774,y=self.sH*0.47,width=self.sW*0.132, height=self.sH*0.06)
+        self.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
     def back(self):
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+    def calculate(self):
+        try:
+            a=float(self.entry[0][0].get())
+            print(a)
+        except:
+             messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
         
 screen = page(root)
 root.mainloop()
