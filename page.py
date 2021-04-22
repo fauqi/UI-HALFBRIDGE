@@ -31,7 +31,7 @@ class page:
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="RED")
         self.frame2=Frame(self.master,bg="RED")
-        self.entry =[[0 for x in range(3)]  for x in range(3)]
+        self.entry =[[0 for x in range(4)]  for x in range(4)]
         self.page_init()
         self.showLayar()
         
@@ -61,7 +61,12 @@ class page:
         self.calculateBtn=Button(self.frame2,image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
         self.resetBtn=Button(self.frame2,image=self.resetImage,command=self.calculate,borderwidth=0,bg="#67B840")
 
-        self.entry[0][0]=Entry(self.frame2,font=20)
+        #self.entry[0][0]=Entry(self.frame2,font=20)
+        for x in range(4):
+            for y in range(4):    
+                self.entry[x][y] = Entry(self.frame2,font=20)
+        self.entry[3][2].destroy()
+        self.entry[3][3].destroy()
 
 
     def showLayar(self):
@@ -78,7 +83,17 @@ class page:
         self.backBtn.place(x=self.sW*0.01,y=self.sH*0.02,width=self.sW*0.032, height=self.sH*0.06)
         self.calculateBtn.place(x=self.sW*0.774,y=self.sH*0.39,width=self.sW*0.132, height=self.sH*0.06)
         self.resetBtn.place(x=self.sW*0.774,y=self.sH*0.47,width=self.sW*0.132, height=self.sH*0.06)
-        self.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
+        #elf.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
+
+        offsetH=self.sH*0.2128
+        offsetW=self.sW*0.181
+        jarakW=self.sW*0.141
+        jarakH=self.sH*0.0449
+        entryWidth=self.sW*0.065
+        entryHeight=self.sH*0.044
+        for j in range(4):
+            for k in range(4):    
+                self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
     def back(self):
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
