@@ -58,8 +58,8 @@ class page:
         self.exitButton = Button(self.frame,command=self.exit,bg="#9561EB",text="EXIT",font='Helvetica 30 bold')
         self.startButton = Button(self.frame,command=self.start,bg="#EF5858",text="START",font='Helvetica 30 bold')
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
-        self.calculateBtn=Button(self.frame2,image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
-        self.resetBtn=Button(self.frame2,image=self.resetImage,command=self.calculate,borderwidth=0,bg="#67B840")
+        self.calculateBtn=Button(self.frame2,activebackground="#67B840",image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
+        self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.calculate,borderwidth=0,bg="#67B840")
 
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(4):
