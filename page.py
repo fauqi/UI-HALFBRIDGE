@@ -107,6 +107,8 @@ class page:
             
         except:
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
+    def reset(self):
+        entry[0][0].delete(0,END)
 
     def hitung(self):
         vinMax=float(self.entry[0][0].get())
