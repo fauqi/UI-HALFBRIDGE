@@ -28,7 +28,7 @@ class FullScreenApp(object):
         self.flag=0
       
 app = FullScreenApp(root)
-class page:
+class Page:
     def __init__(self,master):
         self.master=master
         self.sW=SCREENWIDTH
@@ -36,6 +36,7 @@ class page:
         self.frame=Frame(self.master,bg="RED")
         self.frame2=Frame(self.master,bg="RED")
         self.entry =[[0 for x in range(5)]  for x in range(5)]
+        self.outLabel =[[0 for x in range(5)]  for x in range(5)]
         self.page_init()
         self.showLayar()
         
@@ -69,6 +70,9 @@ class page:
         for x in range(5):
             for y in range(5):    
                 self.entry[x][y] = Entry(self.frame2,font=20)
+        for j in range(5):
+            for k in range(5):    
+                self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
 
 
 
@@ -89,6 +93,8 @@ class page:
         #elf.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
         j=0
         k=0
+        x=0
+        y=0
         offsetH=self.sH*0.165
         offsetW=self.sW*0.181
         jarakW=self.sW*0.141
@@ -99,6 +105,17 @@ class page:
         for j in range(5):
             for k in range(5):    
                 self.entry[j][k].place(x=offsetW+((k*(entryWidth+jarakW))),y=offsetH+((j*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
+        
+        offsetH2=self.sH*0.6367
+        offsetW2=self.sW*0.181
+        jarakW2=self.sW*0.141
+        jarakH2=self.sH*0.0195
+        labelWidth=self.sW*0.065
+        labelHeight=self.sH*0.044
+       
+        for x in range(5):
+            for y in range(5):    
+                self.outLabel[x][y].place(x=offsetW2+((y*(labelWidth+jarakW2))),y=offsetH2+((x*(labelHeight+jarakH2))),width=labelWidth,height=labelHeight)
         self.entry[1][3].place_forget()#kolom,baris
         self.entry[2][3].place_forget()
         self.entry[3][3].place_forget()
@@ -128,5 +145,5 @@ class page:
         a="{:.2f}".format(vinMax)
         print (a)
         
-screen = page(root)
+screen = Page(root)
 root.mainloop()
