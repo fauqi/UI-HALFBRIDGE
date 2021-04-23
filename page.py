@@ -152,8 +152,8 @@ class Page:
         self.duty=float(self.entry[4][0].get())
 
         self.frekuensi=float(self.entry[0][1].get())
-        self.dIl=float(self.entry[1][1].get())
-        self.dVo=float(self.entry[2][1].get())
+        self.rIl=float(self.entry[1][1].get())
+        self.rVo=float(self.entry[2][1].get())
         self.vf=float(self.entry[3][1].get())
         self.acInd=float(self.entry[4][1].get())
 
@@ -167,8 +167,15 @@ class Page:
         self.sigmaSplit=float(self.entry[1][3].get())
         #RUMUS
         self.duty=self.duty/100
+        self.frekuensi=self.frekuensi*1000
         self.rasio = self.vOut/(self.vinMax*self.duty)
         self.outLabel[0][0].config(text=str(self.rasio))
+
+        self.vin_a=self.vinMax/(2*(1/self.rasio)-(2*self.vf))
+        self.dIlx = self.rIl*self.iOut
+        self.Lx=(1/self.dIlx)*(self.vin_a-self.vOut)*(1/(2*self.frekuensi))*((self.vOut+(2*self.vf))/(self.vinMax)+(2*self.vf))
+        self.Lx=self.Lx*1000000
+        self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
     def default(self):
         self.vinMax=100
         self.entry[0][0].insert(0,str(self.vinMax))
@@ -183,10 +190,10 @@ class Page:
 
         self.frekuensi=40
         self.entry[0][1].insert(0,str(self.frekuensi))
-        self.dIl=20
-        self.entry[1][1].insert(0,str(self.dIl))
-        self.dVo=0.1
-        self.entry[2][1].insert(0,str(self.dVo))
+        self.rIl=20
+        self.entry[1][1].insert(0,str(self.rIl))
+        self.rVo=0.001
+        self.entry[2][1].insert(0,str(self.rVo))
         self.vf=1.2
         self.entry[3][1].insert(0,str(self.vf))
         self.acInd=1.61
