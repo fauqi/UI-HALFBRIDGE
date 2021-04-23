@@ -111,7 +111,9 @@ class page:
     def hitung(self):
         vinMax=float(self.entry[0][0].get())
         voutMax=float(self.entry[0][1].get())
-        print(str(vinMax)+str(voutMax))
+        # print(str(vinMax)+str(voutMax))
+        a="{:.2f}".format(vinMax)
+        print (a)
         
 screen = page(root)
 root.mainloop()
