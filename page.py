@@ -98,7 +98,7 @@ class page:
         
         for j in range(4):
             for k in range(4):    
-                self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
+                self.entry[j][k].place(x=offsetW+((k*(entryWidth+jarakW))),y=offsetH+((j*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
         self.entry[3][2].place_forget()#kolom,baris
         self.entry[3][3].place_forget()
         self.master.bind('<Return>',self.enter)
