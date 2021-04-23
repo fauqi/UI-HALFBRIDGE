@@ -138,7 +138,9 @@ class Page:
         #      messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
         self.hitung()
     def reset(self):
-        self.entry[0][0].delete(0,END)
+        for x in range(5):
+            for y in range(5):
+                self.entry[x][y].delete(0,END)
     def hitung(self):
         # vinMax=float(self.entry[0][0].get())
         # voutMax=float(self.entry[0][1].get())
