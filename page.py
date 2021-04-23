@@ -177,8 +177,7 @@ class Page:
 
         self.vin_a=self.vinMax/(2*(1/self.rasio)-(2*self.vf))
         self.dIlx = self.rIl*self.iOut
-        self.Lx=(1/self.dIlx)*(self.vin_a-self.vOut)*(1/(2*self.frekuensi))*(((self.vOut+(2*self.vf))/(self.vinMax+(2*self.vf)))
-       
+        self.Lx=(1/self.dIlx)*(self.vin_a-self.vOut)*(1/(2*self.frekuensi))*(((self.vOut+(2*self.vf))/(self.vinMax+(2*self.vf))))
         self.Lx=self.Lx*1000000
         self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
     def default(self):
