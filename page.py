@@ -170,12 +170,15 @@ class Page:
         #RUMUS
         self.duty=self.duty/100
         self.frekuensi=self.frekuensi*1000
+        self.rIl=self.rIl/100
+
         self.rasio = self.vOut/(self.vinMax*self.duty)
         self.outLabel[0][0].config(text=str(self.rasio))
 
         self.vin_a=self.vinMax/(2*(1/self.rasio)-(2*self.vf))
         self.dIlx = self.rIl*self.iOut
-        self.Lx=(1/self.dIlx)*(self.vin_a-self.vOut)*(1/(2*self.frekuensi))*((self.vOut+(2*self.vf))/(self.vinMax)+(2*self.vf))
+        self.Lx=(1/self.dIlx)*(self.vin_a-self.vOut)*(1/(2*self.frekuensi))*(((self.vOut+(2*self.vf))/(self.vinMax+(2*self.vf)))
+       
         self.Lx=self.Lx*1000000
         self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
     def default(self):
@@ -194,7 +197,7 @@ class Page:
         self.entry[0][1].insert(0,str(self.frekuensi))
         self.rIl=20
         self.entry[1][1].insert(0,str(self.rIl))
-        self.rVo=0.001
+        self.rVo=0.1
         self.entry[2][1].insert(0,str(self.rVo))
         self.vf=1.2
         self.entry[3][1].insert(0,str(self.vf))
