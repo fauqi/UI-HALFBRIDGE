@@ -12,7 +12,9 @@ class FullScreenApp(object):
         self.flag=0
         pad=0
         master.geometry("{0}x{1}+0+0".format(master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
-        master.bind('<Double-1>',self.escape)      
+        master.bind('<Escape>',self.escape)
+        master.bind('<F>',self.full)
+        master.bind('<f>',self.full)      
     def escape(self,event):
         global SCREENHEIGHT,SCREENWIDTH
         if self.flag==0:
@@ -21,7 +23,9 @@ class FullScreenApp(object):
         else:
             self.master.overrideredirect(True)
             self.flag=0
-        
+    def full(self,event):
+        self.master.overrideredirect(True)
+        self.flag=0
       
 app = FullScreenApp(root)
 class page:
@@ -59,7 +63,7 @@ class page:
         self.startButton = Button(self.frame,command=self.start,bg="#EF5858",text="START",font='Helvetica 30 bold')
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
         self.calculateBtn=Button(self.frame2,activebackground="#67B840",image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
-        self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.calculate,borderwidth=0,bg="#67B840")
+        self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.reset,borderwidth=0,bg="#67B840")
 
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(4):
@@ -95,12 +99,17 @@ class page:
         for j in range(4):
             for k in range(4):    
                 self.entry[j][k].place(x=offsetW+((j*(entryWidth+jarakW))),y=offsetH+((k*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
-        self.entry[3][2].place_forget()
+        self.entry[3][2].place_forget()#kolom,baris
         self.entry[3][3].place_forget()
+        self.master.bind('<Return>',self.enter)
+    def enter(self,event):
+        self.calculate()
         
+
     def back(self):
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+        self.master.unbind('<Return>')
     def calculate(self):
         try:
             self.hitung()
@@ -108,7 +117,7 @@ class page:
         except:
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
     def reset(self):
-        entry[0][0].delete(0,END)
+        self.entry[0][0].delete(0,END)
 
     def hitung(self):
         vinMax=float(self.entry[0][0].get())
