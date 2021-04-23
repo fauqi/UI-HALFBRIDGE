@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import messagebox
+import math
 root=Tk()
 SCREENWIDTH = root.winfo_screenwidth()
 SCREENHEIGHT = root.winfo_screenheight()
@@ -120,6 +121,10 @@ class Page:
         self.entry[2][3].place_forget()
         self.entry[3][3].place_forget()
         self.entry[4][3].place_forget()
+
+        self.outLabel[4][1].place_forget()
+        self.outLabel[3][3].place_forget()
+        self.outLabel[4][3].place_forget()
         self.defaultBtn.place(x=100,y=100,width=50,height=50)
         self.master.bind('<Return>',self.enter)
     def enter(self,event):
@@ -171,15 +176,70 @@ class Page:
         self.duty=self.duty/100
         self.frekuensi=self.frekuensi*1000
         self.rIl=self.rIl/100
+        self.rVo=self.rVo/100
+        self.dBobInd=self.dBobInd/10
 
         self.rasio = self.vOut/(self.vinMax*self.duty)
         self.outLabel[0][0].config(text=str(self.rasio))
 
+        #Lx
         self.vin_a=self.vinMax/(2*(1/self.rasio)-(2*self.vf))
         self.dIlx = self.rIl*self.iOut
         self.Lx=(1/self.dIlx)*(self.vin_a-self.vOut)*(1/(2*self.frekuensi))*(((self.vOut+(2*self.vf))/(self.vinMax+(2*self.vf))))
+ 
+
+        #iL(avg) & iL(max)
+        self.iL_avg = self.iOut
+        self.iL_max = self.iL_avg+(self.dIlx/2)
+
+
+        #winding number
+        self.n=((self.Lx*self.iL_max)/(self.bMax*self.acInd))*pow(10,4)
+        
+        #wire size
+        self.kBobInd = 3.14*self.dBobInd
+        self.wireLength = (self.n*self.kBobInd*self.sigmaSplit)+(0.4*(self.n*self.kBobInd*self.sigmaSplit))
+        print(3.14*self.dBobInd)
+
+        #mulai trafo
+        #N1
+        T=1/self.frekuensi
+        self.N1_min=((self.duty*T*self.vinMax)/(2*self.bMax*self.acTraf))*pow(10,4)
+        self.N1=2*self.N1_min
+        #N2
+        self.N2= self.N1*self.rasio
+        #I1(rms)dan I2(rms)
+        self.I1_rms=self.rasio*self.iOut*math.sqrt(self.duty)
+        self.I2_rms=0.5*self.iOut*math.sqrt(self.duty+1)
+        #d1 dan d2
+        self.d1=math.sqrt((4*self.I1_rms)/(3.14*self.s))
+        self.d2=math.sqrt((4*self.I2_rms)/(3.14*self.s))
+        #R
+        self.R=self.vOut/self.iOut
+
+        #Co
+        self.dVo=self.rVo*self.vOut
+        self.Co=((1-self.duty)/(8*self.Lx*pow(2*self.frekuensi,2)))*(self.vOut/self.dVo)
+      
         self.Lx=self.Lx*1000000
+        self.Co=self.Co*1000000
         self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
+        self.outLabel[4][0].config(text="{:.2f}".format(self.iL_avg))
+        self.outLabel[0][1].config(text="{:.2f}".format(self.iL_max))
+        self.outLabel[3][0].config(text="{:.2f}".format(self.n))
+        self.outLabel[1][0].config(text="{:.2f}".format(self.wireLength))
+        self.outLabel[0][2].config(text="{:.2f}".format(self.N1))
+        self.outLabel[1][2].config(text="{:.2f}".format(self.N2))
+        self.outLabel[2][2].config(text="{:.2f}".format(self.I1_rms))
+        self.outLabel[3][2].config(text="{:.2f}".format(self.I2_rms))
+        self.outLabel[4][2].config(text="{:.2f}".format(self.d1))
+        self.outLabel[0][3].config(text="{:.2f}".format(self.d2))
+        self.outLabel[1][1].config(text="{:.2f}".format(self.kBobInd))
+        self.outLabel[2][0].config(text="{:.2f}".format(self.R))
+        self.outLabel[2][1].config(text="{:.2f}".format(self.Co))
+
+
+    
     def default(self):
         self.vinMax=100
         self.entry[0][0].insert(0,str(self.vinMax))
@@ -218,6 +278,8 @@ class Page:
         self.entry[0][3].insert(0,str(self.s))
         self.sigmaSplit=10
         self.entry[1][3].insert(0,str(self.sigmaSplit))
+
+
   
 
 
