@@ -35,7 +35,7 @@ class page:
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="RED")
         self.frame2=Frame(self.master,bg="RED")
-        self.entry =[[0 for x in range(4)]  for x in range(4)]
+        self.entry =[[0 for x in range(5)]  for x in range(5)]
         self.page_init()
         self.showLayar()
         
@@ -66,8 +66,8 @@ class page:
         self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.reset,borderwidth=0,bg="#67B840")
 
         #self.entry[0][0]=Entry(self.frame2,font=20)
-        for x in range(4):
-            for y in range(4):    
+        for x in range(5):
+            for y in range(5):    
                 self.entry[x][y] = Entry(self.frame2,font=20)
 
 
@@ -89,18 +89,20 @@ class page:
         #elf.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
         j=0
         k=0
-        offsetH=self.sH*0.2128
+        offsetH=self.sH*0.165
         offsetW=self.sW*0.181
         jarakW=self.sW*0.141
-        jarakH=self.sH*0.0449
+        jarakH=self.sH*0.0292
         entryWidth=self.sW*0.065
         entryHeight=self.sH*0.044
         
-        for j in range(4):
-            for k in range(4):    
+        for j in range(5):
+            for k in range(5):    
                 self.entry[j][k].place(x=offsetW+((k*(entryWidth+jarakW))),y=offsetH+((j*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
-        self.entry[3][2].place_forget()#kolom,baris
+        self.entry[1][3].place_forget()#kolom,baris
+        self.entry[2][3].place_forget()
         self.entry[3][3].place_forget()
+        self.entry[4][3].place_forget()
         self.master.bind('<Return>',self.enter)
     def enter(self,event):
         self.calculate()
