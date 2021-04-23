@@ -65,7 +65,7 @@ class Page:
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
         self.calculateBtn=Button(self.frame2,activebackground="#67B840",image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
         self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.reset,borderwidth=0,bg="#67B840")
-
+        self.defaultBtn=Button(self.frame2,command=self.default)
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(5):
             for y in range(5):    
@@ -116,10 +116,11 @@ class Page:
         for x in range(5):
             for y in range(5):    
                 self.outLabel[x][y].place(x=offsetW2+((y*(labelWidth+jarakW2))),y=offsetH2+((x*(labelHeight+jarakH2))),width=labelWidth,height=labelHeight)
-        self.entry[1][3].place_forget()#kolom,baris
+        
         self.entry[2][3].place_forget()
         self.entry[3][3].place_forget()
         self.entry[4][3].place_forget()
+        self.defaultBtn.place(x=100,y=100,width=50,height=50)
         self.master.bind('<Return>',self.enter)
     def enter(self,event):
         self.calculate()
@@ -130,20 +131,84 @@ class Page:
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         self.master.unbind('<Return>')
     def calculate(self):
-        try:
-            self.hitung()
+        # try:
+        #     self.hitung()
             
-        except:
-             messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
+        # except:
+        #      messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
+        self.hitung()
     def reset(self):
         self.entry[0][0].delete(0,END)
-
     def hitung(self):
-        vinMax=float(self.entry[0][0].get())
-        voutMax=float(self.entry[0][1].get())
-        # print(str(vinMax)+str(voutMax))
-        a="{:.2f}".format(vinMax)
-        print (a)
-        
+        # vinMax=float(self.entry[0][0].get())
+        # voutMax=float(self.entry[0][1].get())
+        # # print(str(vinMax)+str(voutMax))
+        # a="{:.2f}".format(vinMax)
+        # print (a)
+        self.vinMax=float(self.entry[0][0].get())
+        self.vinMin=float(self.entry[1][0].get())
+        self.vOut=float(self.entry[2][0].get())
+        self.iOut=float(self.entry[3][0].get())
+        self.duty=float(self.entry[4][0].get())
+
+        self.frekuensi=float(self.entry[0][1].get())
+        self.dIl=float(self.entry[1][1].get())
+        self.dVo=float(self.entry[2][1].get())
+        self.vf=float(self.entry[3][1].get())
+        self.acInd=float(self.entry[4][1].get())
+
+        self.dBobInd=float(self.entry[0][2].get())
+        self.acTraf=float(self.entry[1][2].get())
+        self.dBobTraf=float(self.entry[2][2].get())
+        self.bMax=float(self.entry[3][2].get())
+        self.J=float(self.entry[4][2].get())
+
+        self.s=float(self.entry[0][3].get())
+        self.sigmaSplit=float(self.entry[1][3].get())
+        #RUMUS
+        self.duty=self.duty/100
+        self.rasio = self.vOut/(self.vinMax*self.duty)
+        self.outLabel[0][0].config(text=str(self.rasio))
+    def default(self):
+        self.vinMax=100
+        self.entry[0][0].insert(0,str(self.vinMax))
+        self.vinMin=100
+        self.entry[1][0].insert(0,str(self.vinMin))
+        self.vOut=19
+        self.entry[2][0].insert(0,str(self.vOut))
+        self.iOut=3
+        self.entry[3][0].insert(0,str(self.iOut))
+        self.duty=40
+        self.entry[4][0].insert(0,str(self.duty))
+
+        self.frekuensi=40
+        self.entry[0][1].insert(0,str(self.frekuensi))
+        self.dIl=20
+        self.entry[1][1].insert(0,str(self.dIl))
+        self.dVo=0.1
+        self.entry[2][1].insert(0,str(self.dVo))
+        self.vf=1.2
+        self.entry[3][1].insert(0,str(self.vf))
+        self.acInd=1.61
+        self.entry[4][1].insert(0,str(self.acInd))
+
+        self.dBobInd=16
+        self.entry[0][2].insert(0,str(self.dBobInd))
+        self.acTraf=1.96
+        self.entry[1][2].insert(0,str(self.acTraf))
+        self.dBobTraf=17
+        self.entry[2][2].insert(0,str(self.dBobTraf))
+        self.bMax=0.25
+        self.entry[3][2].insert(0,str(self.bMax))
+        self.J=4.5
+        self.entry[4][2].insert(0,str(self.J))
+
+        self.s=4.5
+        self.entry[0][3].insert(0,str(self.s))
+        self.sigmaSplit=10
+        self.entry[1][3].insert(0,str(self.sigmaSplit))
+  
+
+
 screen = Page(root)
 root.mainloop()
