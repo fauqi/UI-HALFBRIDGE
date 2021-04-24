@@ -1,36 +1,44 @@
 from tkinter import *
+from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import messagebox
 import math
+scaleW=1
+scaleH=1
 root=Tk()
 SCREENWIDTH = root.winfo_screenwidth()
-SCREENHEIGHT = root.winfo_screenheight()
+SCREENHEIGHT = root.winfo_screenheight()-20
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
+root.resizable(True,True)
 class FullScreenApp(object):
     def __init__(self, master, **kwargs):
         self.master=master
         self.flag=0
         pad=0
-        master.geometry("{0}x{1}+0+0".format(master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
+        
         master.bind('<Escape>',self.escape)
         master.bind('<F>',self.full)
         master.bind('<f>',self.full)      
     def escape(self,event):
-        global SCREENHEIGHT,SCREENWIDTH
+        global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
         if self.flag==0:
             self.master.overrideredirect(False)
             self.flag=1
         else:
             self.master.overrideredirect(True)
             self.flag=0
+
+        
     def full(self,event):
         self.master.overrideredirect(True)
         self.flag=0
+
       
 app = FullScreenApp(root)
 class Page:
     def __init__(self,master):
+        global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
         self.master=master
         self.sW=SCREENWIDTH
         self.sH=SCREENHEIGHT
@@ -214,6 +222,10 @@ class Page:
         #d1 dan d2
         self.d1=math.sqrt((4*self.I1_rms)/(3.14*self.s))
         self.d2=math.sqrt((4*self.I2_rms)/(3.14*self.s))
+        #wire lengh trafo
+        self.kBobTraf=3.14*self.dBobTraf
+        self.length_p=(self.N1*self.kBobTraf*self.sigmaSplit)+(0.3*(self.N1*self.kBobTraf*self.sigmaSplit))
+        self.length_s=(self.N2*self.kBobTraf*self.sigmaSplit)+(0.3*(self.N2*self.kBobTraf*self.sigmaSplit))
         #R
         self.R=self.vOut/self.iOut
 
@@ -223,6 +235,8 @@ class Page:
       
         self.Lx=self.Lx*1000000
         self.Co=self.Co*1000000
+        self.length_p=self.length_p/10#dijadikan cm
+        self.length_s=self.length_s/10
         self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
         self.outLabel[4][0].config(text="{:.2f}".format(self.iL_avg))
         self.outLabel[0][1].config(text="{:.2f}".format(self.iL_max))
@@ -237,6 +251,8 @@ class Page:
         self.outLabel[1][1].config(text="{:.2f}".format(self.kBobInd))
         self.outLabel[2][0].config(text="{:.2f}".format(self.R))
         self.outLabel[2][1].config(text="{:.2f}".format(self.Co))
+        self.outLabel[1][3].config(text="{:.2f}".format(self.length_p))
+        self.outLabel[2][3].config(text="{:.2f}".format(self.length_s))
 
 
     
