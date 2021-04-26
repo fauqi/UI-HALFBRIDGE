@@ -6,12 +6,12 @@ import math
 scaleW=1
 scaleH=1
 root=Tk()
-help=Tk()
+
 SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
 SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
-help.geometry("{0}x{1}+0+0".format(int(SCREENWIDTH*0.44), int(SCREENHEIGHT*0.965)))
+
 # root.resizable(True,True)
 class FullScreenApp(object):
     def __init__(self, master, **kwargs):
@@ -168,7 +168,9 @@ class Page:
     def history(self):
         pass
     def help(self):
-        help.mainloop()
+        Page2()
+
+        
     def enter(self,event):
         self.calculate()
         
@@ -237,7 +239,7 @@ class Page:
         #wire size
         self.kBobInd = 3.14*self.dBobInd
         self.wireLength = (self.n*self.kBobInd*self.sigmaSplit)+(0.4*(self.n*self.kBobInd*self.sigmaSplit))
-        print(3.14*self.dBobInd)
+      
 
         #mulai trafo
         #N1
@@ -266,9 +268,9 @@ class Page:
         #Rs dan Cs
         self.voff=(self.vinMax/2)-(self.Lx*(self.dIlx/(self.duty*self.T)))-self.vOut
         self.Cs = (self.iOut*self.tfall)/(2*self.voff)
-        print(self.Cs)
+    
         self.Rs=(self.duty*self.T)/(2*self.Cs)
-        print(self.Rs)
+
         self.Lx=self.Lx*1000000
         self.Co=self.Co*1000000
         self.length_p=self.length_p/10#dijadikan cm
@@ -336,8 +338,30 @@ class Page:
         self.entry[1][3].insert(0,str(self.sigmaSplit))
         self.tfall=75
         self.entry[2][3].insert(0,str(self.tfall))
+screen = Page(root)
+class Page2:
+    def __init__(self):
+        self.help=Toplevel()
+        self.help.title("HELP")
+        self.a=int(0.55*screen.sW)
+        self.help.geometry("%dx%d+%d+0" % (int(screen.sW*0.44), int(screen.sH*0.9),self.a))
+        self.photo=Image.open("foto/pdf.png")
+        self.photo= self.photo.resize((int(screen.sW*0.44), int(screen.sH*0.9)), Image.ANTIALIAS)
+        self.helpPageImage = ImageTk.PhotoImage(self.photo)
+        self.frame=Frame(self.help)
+        self.page_init()
+        self.show()
+    def page_init(self):
+        # self.frame.place(x=0,y=0,width=int(screen.sW*0.44),height=int(screen.sH*0.9))
 
 
+        self.labelImage=Label(self.help,width=int(screen.sW*0.44),height= int(screen.sH*0.9),bg="WHITE")
+        
+    def show(self):
+        self.labelImage.place(x=0,y=0)
+        self.labelImage.config(image=self.helpPageImage)
+        self.help.mainloop()
+        
   
 
 
