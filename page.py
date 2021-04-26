@@ -6,10 +6,12 @@ import math
 scaleW=1
 scaleH=1
 root=Tk()
+help=Tk()
 SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
 SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
+help.geometry("{0}x{1}+0+0".format(int(SCREENWIDTH*0.44), int(SCREENHEIGHT*0.965)))
 # root.resizable(True,True)
 class FullScreenApp(object):
     def __init__(self, master, **kwargs):
@@ -166,7 +168,7 @@ class Page:
     def history(self):
         pass
     def help(self):
-        pass
+        help.mainloop()
     def enter(self,event):
         self.calculate()
         
