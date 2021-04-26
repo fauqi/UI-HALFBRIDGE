@@ -367,7 +367,7 @@ class Page2:
         self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
     def pdf(self):
-        os.system("foto/pdf.png")
+        os.system("pdf.pdf")
   
 
 
