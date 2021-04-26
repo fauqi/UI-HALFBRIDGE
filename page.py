@@ -345,21 +345,25 @@ class Page2:
         self.help.title("HELP")
         self.a=int(0.55*screen.sW)
         self.help.geometry("%dx%d+%d+0" % (int(screen.sW*0.44), int(screen.sH*0.9),self.a))
-        self.photo=Image.open("foto/pdf.png")
-        self.photo= self.photo.resize((int(screen.sW*0.44), int(screen.sH*0.9)), Image.ANTIALIAS)
-        self.helpPageImage = ImageTk.PhotoImage(self.photo)
         self.frame=Frame(self.help)
         self.page_init()
         self.show()
     def page_init(self):
-        # self.frame.place(x=0,y=0,width=int(screen.sW*0.44),height=int(screen.sH*0.9))
-
+        self.photo=Image.open("foto/help_page.png")
+        self.photo= self.photo.resize((int(screen.sW*0.44), int(screen.sH*0.9)), Image.ANTIALIAS)
+        self.helpPageImage = ImageTk.PhotoImage(self.photo)
+        self.photo2=Image.open("foto/pdf.png")
+        self.photo2= self.photo2.resize((int(screen.sW*0.0458), int(screen.sH*0.077)), Image.ANTIALIAS)
+        self.pdfImage = ImageTk.PhotoImage(self.photo2)
 
         self.labelImage=Label(self.help,width=int(screen.sW*0.44),height= int(screen.sH*0.9),bg="WHITE")
+        self.pdfBtn=Button(self.help,activebackground="#1F4DC5",bg="#1F4DC5",borderwidth=0,image=self.pdfImage)
         
     def show(self):
+        self.frame.place(x=0,y=0,width=int(screen.sW*0.44),height=int(screen.sH*0.9))
         self.labelImage.place(x=0,y=0)
         self.labelImage.config(image=self.helpPageImage)
+        self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
         
   
