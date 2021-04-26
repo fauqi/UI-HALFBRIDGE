@@ -4,13 +4,13 @@ from PIL import ImageTk, Image
 from tkinter import messagebox
 import math
 scaleW=1
-scaleH=1
+scaleH=0
 root=Tk()
 SCREENWIDTH = root.winfo_screenwidth()
-SCREENHEIGHT = root.winfo_screenheight()-20
+SCREENHEIGHT = root.winfo_screenheight()-scaleH
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
-root.resizable(True,True)
+# root.resizable(True,True)
 class FullScreenApp(object):
     def __init__(self, master, **kwargs):
         self.master=master
@@ -25,20 +25,32 @@ class FullScreenApp(object):
         if self.flag==0:
             self.master.overrideredirect(False)
             self.flag=1
+            scaleH=80
+            
+
         else:
             self.master.overrideredirect(True)
             self.flag=0
-
+            scaleH=0
+            
+        Page(root)
         
     def full(self,event):
+        global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
         self.master.overrideredirect(True)
         self.flag=0
-
+        scaleH=0
+        
+        Page(root)
+        
       
 app = FullScreenApp(root)
 class Page:
     def __init__(self,master):
         global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
+        SCREENWIDTH = root.winfo_screenwidth()
+        SCREENHEIGHT = root.winfo_screenheight()-scaleH
+        master.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
         self.master=master
         self.sW=SCREENWIDTH
         self.sH=SCREENHEIGHT
@@ -50,6 +62,8 @@ class Page:
         self.showLayar()
         
     def page_init(self):
+        self.frame.place_forget()
+        self.frame2.place_forget()
         self.photo=Image.open("foto/awal.png")
         self.photo = self.photo.resize((self.sW, self.sH), Image.ANTIALIAS)
         self.gambar = ImageTk.PhotoImage(self.photo)
@@ -65,6 +79,9 @@ class Page:
         self.photo5=Image.open("foto/reset.png")
         self.photo5 = self.photo5.resize((int(self.sW*0.132), int(self.sH*0.06)), Image.ANTIALIAS)
         self.resetImage = ImageTk.PhotoImage(self.photo5)
+        self.photo6=Image.open("foto/default.png")
+        self.photo6 = self.photo6.resize((int(self.sW*0.0276), int(self.sH*0.14)), Image.ANTIALIAS)
+        self.defaultImage = ImageTk.PhotoImage(self.photo6)
         
 
         self.labelImage=Label(self.frame,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar)
@@ -74,7 +91,7 @@ class Page:
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
         self.calculateBtn=Button(self.frame2,activebackground="#67B840",image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
         self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.reset,borderwidth=0,bg="#67B840")
-        self.defaultBtn=Button(self.frame2,command=self.default)
+        self.defaultBtn=Button(self.frame2,command=self.default,image=self.defaultImage,activebackground="#67B840",bg="#67B840",borderwidth=0)
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(5):
             for y in range(5):    
@@ -126,14 +143,14 @@ class Page:
             for y in range(5):    
                 self.outLabel[x][y].place(x=offsetW2+((y*(labelWidth+jarakW2))),y=offsetH2+((x*(labelHeight+jarakH2))),width=labelWidth,height=labelHeight)
         
-        self.entry[2][3].place_forget()
+        #self.entry[2][3].place_forget()
         self.entry[3][3].place_forget()
         self.entry[4][3].place_forget()
 
-        self.outLabel[4][1].place_forget()
-        self.outLabel[3][3].place_forget()
+        # self.outLabel[4][1].place_forget()
+        # self.outLabel[3][3].place_forget()
         self.outLabel[4][3].place_forget()
-        self.defaultBtn.place(x=100,y=100,width=50,height=50)
+        self.defaultBtn.place(x=0.7395*self.sW,y=self.sH*0.3896,width=self.sW*0.0276,height=self.sH*0.14)
         self.master.bind('<Return>',self.enter)
     def enter(self,event):
         self.calculate()
@@ -180,13 +197,14 @@ class Page:
 
         self.s=float(self.entry[0][3].get())
         self.sigmaSplit=float(self.entry[1][3].get())
+        self.tfall=float(self.entry[2][3].get())
         #RUMUS
         self.duty=self.duty/100
         self.frekuensi=self.frekuensi*1000
         self.rIl=self.rIl/100
         self.rVo=self.rVo/100
         self.dBobInd=self.dBobInd/10
-
+        self.tfall=self.tfall*0.000000001
         self.rasio = self.vOut/(self.vinMax*self.duty)
         self.outLabel[0][0].config(text=str(self.rasio))
 
@@ -211,8 +229,8 @@ class Page:
 
         #mulai trafo
         #N1
-        T=1/self.frekuensi
-        self.N1_min=((self.duty*T*self.vinMax)/(2*self.bMax*self.acTraf))*pow(10,4)
+        self.T=1/self.frekuensi
+        self.N1_min=((self.duty*self.T*self.vinMax)/(2*self.bMax*self.acTraf))*pow(10,4)
         self.N1=2*self.N1_min
         #N2
         self.N2= self.N1*self.rasio
@@ -232,11 +250,18 @@ class Page:
         #Co
         self.dVo=self.rVo*self.vOut
         self.Co=((1-self.duty)/(8*self.Lx*pow(2*self.frekuensi,2)))*(self.vOut/self.dVo)
-      
+
+        #Rs dan Cs
+        self.voff=(self.vinMax/2)-(self.Lx*(self.dIlx/(self.duty*self.T)))-self.vOut
+        self.Cs = (self.iOut*self.tfall)/(2*self.voff)
+        print(self.Cs)
+        self.Rs=(self.duty*self.T)/(2*self.Cs)
+        print(self.Rs)
         self.Lx=self.Lx*1000000
         self.Co=self.Co*1000000
         self.length_p=self.length_p/10#dijadikan cm
         self.length_s=self.length_s/10
+        self.Cs=self.Cs*1000000000
         self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
         self.outLabel[4][0].config(text="{:.2f}".format(self.iL_avg))
         self.outLabel[0][1].config(text="{:.2f}".format(self.iL_max))
@@ -253,6 +278,9 @@ class Page:
         self.outLabel[2][1].config(text="{:.2f}".format(self.Co))
         self.outLabel[1][3].config(text="{:.2f}".format(self.length_p))
         self.outLabel[2][3].config(text="{:.2f}".format(self.length_s))
+        self.outLabel[4][1].config(text="{:.2f}".format(self.Rs))
+        self.outLabel[3][3].config(text="{:.2f}".format(self.Cs))
+
 
 
     
@@ -294,6 +322,8 @@ class Page:
         self.entry[0][3].insert(0,str(self.s))
         self.sigmaSplit=10
         self.entry[1][3].insert(0,str(self.sigmaSplit))
+        self.tfall=75
+        self.entry[2][3].insert(0,str(self.tfall))
 
 
   
