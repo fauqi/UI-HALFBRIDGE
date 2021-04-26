@@ -4,6 +4,8 @@ from PIL import ImageTk, Image
 from tkinter import messagebox
 import math
 import os
+import threading
+import time
 scaleW=1
 scaleH=1
 root=Tk()
@@ -340,6 +342,21 @@ class Page:
         self.tfall=75
         self.entry[2][3].insert(0,str(self.tfall))
 screen = Page(root)
+def unloading():
+    screen.Giflabel.place_forget()
+frameCnt = 29
+frames = [PhotoImage(file='loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
+def update(ind):
+    frame = frames[ind]
+    ind += 1
+    if ind == frameCnt:
+        ind = 0
+    screen.Giflabel.configure(image=frame,bg="WHITE")
+    screen.frame.after(100, update, ind)
+
+def loadGif():    
+    screen.Giflabel.place(x=screen.sW*0.5,y=screen.sH*0.5,width = 150,height=150,anchor=CENTER)
+    screen.frame.after(0, update, 0)
 class Page2:
     def __init__(self):
         self.help=Toplevel()
@@ -356,6 +373,7 @@ class Page2:
         self.photo2=Image.open("foto/pdf.png")
         self.photo2= self.photo2.resize((int(screen.sW*0.0458), int(screen.sH*0.077)), Image.ANTIALIAS)
         self.pdfImage = ImageTk.PhotoImage(self.photo2)
+        self.Giflabel = Label(root)
 
         self.labelImage=Label(self.help,width=int(screen.sW*0.44),height= int(screen.sH*0.9),bg="WHITE")
         self.pdfBtn=Button(self.help,command=self.pdf,activebackground="#1F4DC5",bg="#1F4DC5",borderwidth=0,image=self.pdfImage)
@@ -367,9 +385,18 @@ class Page2:
         self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
     def pdf(self):
-        os.system("pdf.pdf")
-  
+        root.after(0,loadGif)
+        threadPdf.set()
+        
+def timer():
+    while True:
+        time.sleep(0.1)
+        if threadPdf.is_set():
+            os.system("pdf.pdf")
+            screen.frame.after(100,unloading)
 
-
+threadPdf=threading.Event()
+t1= threading.Thread(target=timer)
+t1.start()
 screen = Page(root)
 root.mainloop()
