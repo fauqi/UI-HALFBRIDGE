@@ -4,10 +4,10 @@ from PIL import ImageTk, Image
 from tkinter import messagebox
 import math
 scaleW=1
-scaleH=0
+scaleH=1
 root=Tk()
-SCREENWIDTH = root.winfo_screenwidth()
-SCREENHEIGHT = root.winfo_screenheight()-scaleH
+SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
+SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 # root.resizable(True,True)
@@ -25,13 +25,13 @@ class FullScreenApp(object):
         if self.flag==0:
             self.master.overrideredirect(False)
             self.flag=1
-            scaleH=80
+            scaleH=0.9259
             
 
         else:
             self.master.overrideredirect(True)
             self.flag=0
-            scaleH=0
+            scaleH=1
             
         Page(root)
         
@@ -39,7 +39,7 @@ class FullScreenApp(object):
         global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
         self.master.overrideredirect(True)
         self.flag=0
-        scaleH=0
+        scaleH=1
         
         Page(root)
         
@@ -48,8 +48,8 @@ app = FullScreenApp(root)
 class Page:
     def __init__(self,master):
         global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
-        SCREENWIDTH = root.winfo_screenwidth()
-        SCREENHEIGHT = root.winfo_screenheight()-scaleH
+        SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
+        SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
         master.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
         self.master=master
         self.sW=SCREENWIDTH
@@ -187,11 +187,6 @@ class Page:
             for y in range(5):
                 self.entry[x][y].delete(0,END)
     def hitung(self):
-        # vinMax=float(self.entry[0][0].get())
-        # voutMax=float(self.entry[0][1].get())
-        # # print(str(vinMax)+str(voutMax))
-        # a="{:.2f}".format(vinMax)
-        # print (a)
         self.vinMax=float(self.entry[0][0].get())
         self.vinMin=float(self.entry[1][0].get())
         self.vOut=float(self.entry[2][0].get())
