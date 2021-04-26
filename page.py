@@ -82,7 +82,13 @@ class Page:
         self.photo6=Image.open("foto/default.png")
         self.photo6 = self.photo6.resize((int(self.sW*0.0276), int(self.sH*0.14)), Image.ANTIALIAS)
         self.defaultImage = ImageTk.PhotoImage(self.photo6)
-        
+        self.photo7=Image.open("foto/help.png")
+        self.photo7 = self.photo7.resize((int(self.sW*0.026), int(self.sH*0.0488)), Image.ANTIALIAS)
+        self.helpImage = ImageTk.PhotoImage(self.photo7)
+        self.photo8=Image.open("foto/history.png")
+        self.photo8= self.photo8.resize((int(self.sW*0.062), int(self.sH*0.036)), Image.ANTIALIAS)
+        self.historyImage = ImageTk.PhotoImage(self.photo8)
+
 
         self.labelImage=Label(self.frame,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar)
         self.labelImage2=Label(self.frame2,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar2)
@@ -92,6 +98,8 @@ class Page:
         self.calculateBtn=Button(self.frame2,activebackground="#67B840",image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
         self.resetBtn=Button(self.frame2,activebackground="#67B840",image=self.resetImage,command=self.reset,borderwidth=0,bg="#67B840")
         self.defaultBtn=Button(self.frame2,command=self.default,image=self.defaultImage,activebackground="#67B840",bg="#67B840",borderwidth=0)
+        self.helpBtn=Button(self.frame2,command=self.help,image=self.helpImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
+        self.historyBtn=Button(self.frame2,command=self.history,image=self.historyImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(5):
             for y in range(5):    
@@ -116,7 +124,10 @@ class Page:
         self.backBtn.place(x=self.sW*0.01,y=self.sH*0.02,width=self.sW*0.032, height=self.sH*0.06)
         self.calculateBtn.place(x=self.sW*0.774,y=self.sH*0.39,width=self.sW*0.132, height=self.sH*0.06)
         self.resetBtn.place(x=self.sW*0.774,y=self.sH*0.47,width=self.sW*0.132, height=self.sH*0.06)
-        #elf.entry[0][0].place(x=0.798*self.sW,y=0.299*self.sH,width=self.sW*0.065,height=self.sH*0.044)
+        self.defaultBtn.place(x=0.7395*self.sW,y=self.sH*0.3896,width=self.sW*0.0276,height=self.sH*0.14)
+        self.helpBtn.place(x=0.962*self.sW,y=self.sH*0.0175,width=self.sW*0.026,height=self.sH*0.0488)
+        self.historyBtn.place(x=0.892*self.sW,y=self.sH*0.0244,width=self.sW*0.062,height=self.sH*0.036)
+       
         j=0
         k=0
         x=0
@@ -150,8 +161,12 @@ class Page:
         # self.outLabel[4][1].place_forget()
         # self.outLabel[3][3].place_forget()
         self.outLabel[4][3].place_forget()
-        self.defaultBtn.place(x=0.7395*self.sW,y=self.sH*0.3896,width=self.sW*0.0276,height=self.sH*0.14)
+   
         self.master.bind('<Return>',self.enter)
+    def history(self):
+        pass
+    def help(self):
+        pass
     def enter(self,event):
         self.calculate()
         
