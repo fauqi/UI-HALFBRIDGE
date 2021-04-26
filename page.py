@@ -6,10 +6,14 @@ import math
 import os
 import threading
 import time
+
+flag=0
 scaleW=1
 scaleH=1
 root=Tk()
 
+SCREENWIDTH_unscaled = int(root.winfo_screenwidth())
+SCREENHEIGHT_unscaled = int(root.winfo_screenheight())
 SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
 SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
 root.overrideredirect(True)
@@ -65,7 +69,14 @@ class Page:
         self.outLabel =[[0 for x in range(5)]  for x in range(5)]
         self.page_init()
         self.showLayar()
-        
+        self.master.bind('<Enter>',self.off)
+    def off(self,event):
+        global proc
+        threadPdf.clear()
+        self.unloading()
+      
+        # os._exit()
+        #sys.exit()
     def page_init(self):
         self.Giflabel = Label(root)
         self.frame.place_forget()
@@ -115,7 +126,8 @@ class Page:
                 self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
 
 
-
+    def unloading(self):
+        self.Giflabel.place_forget()
     def showLayar(self):
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         self.labelImage.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
@@ -303,48 +315,48 @@ class Page:
 
     
     def default(self):
-        self.vinMax=100
-        self.entry[0][0].insert(0,str(self.vinMax))
-        self.vinMin=100
-        self.entry[1][0].insert(0,str(self.vinMin))
-        self.vOut=19
-        self.entry[2][0].insert(0,str(self.vOut))
-        self.iOut=3
-        self.entry[3][0].insert(0,str(self.iOut))
-        self.duty=40
-        self.entry[4][0].insert(0,str(self.duty))
+        if self.entry[0][0].get() == "":
+            self.vinMax=100
+            self.entry[0][0].insert(0,str(self.vinMax))
+            self.vinMin=100
+            self.entry[1][0].insert(0,str(self.vinMin))
+            self.vOut=19
+            self.entry[2][0].insert(0,str(self.vOut))
+            self.iOut=3
+            self.entry[3][0].insert(0,str(self.iOut))
+            self.duty=40
+            self.entry[4][0].insert(0,str(self.duty))
 
-        self.frekuensi=40
-        self.entry[0][1].insert(0,str(self.frekuensi))
-        self.rIl=20
-        self.entry[1][1].insert(0,str(self.rIl))
-        self.rVo=0.1
-        self.entry[2][1].insert(0,str(self.rVo))
-        self.vf=1.2
-        self.entry[3][1].insert(0,str(self.vf))
-        self.acInd=1.61
-        self.entry[4][1].insert(0,str(self.acInd))
+            self.frekuensi=40
+            self.entry[0][1].insert(0,str(self.frekuensi))
+            self.rIl=20
+            self.entry[1][1].insert(0,str(self.rIl))
+            self.rVo=0.1
+            self.entry[2][1].insert(0,str(self.rVo))
+            self.vf=1.2
+            self.entry[3][1].insert(0,str(self.vf))
+            self.acInd=1.61
+            self.entry[4][1].insert(0,str(self.acInd))
 
-        self.dBobInd=16
-        self.entry[0][2].insert(0,str(self.dBobInd))
-        self.acTraf=1.96
-        self.entry[1][2].insert(0,str(self.acTraf))
-        self.dBobTraf=17
-        self.entry[2][2].insert(0,str(self.dBobTraf))
-        self.bMax=0.25
-        self.entry[3][2].insert(0,str(self.bMax))
-        self.J=4.5
-        self.entry[4][2].insert(0,str(self.J))
+            self.dBobInd=16
+            self.entry[0][2].insert(0,str(self.dBobInd))
+            self.acTraf=1.96
+            self.entry[1][2].insert(0,str(self.acTraf))
+            self.dBobTraf=17
+            self.entry[2][2].insert(0,str(self.dBobTraf))
+            self.bMax=0.25
+            self.entry[3][2].insert(0,str(self.bMax))
+            self.J=4.5
+            self.entry[4][2].insert(0,str(self.J))
 
-        self.s=4.5
-        self.entry[0][3].insert(0,str(self.s))
-        self.sigmaSplit=10
-        self.entry[1][3].insert(0,str(self.sigmaSplit))
-        self.tfall=75
-        self.entry[2][3].insert(0,str(self.tfall))
+            self.s=4.5
+            self.entry[0][3].insert(0,str(self.s))
+            self.sigmaSplit=10
+            self.entry[1][3].insert(0,str(self.sigmaSplit))
+            self.tfall=75
+            self.entry[2][3].insert(0,str(self.tfall))
 screen = Page(root)
-def unloading():
-    screen.Giflabel.place_forget()
+
 frameCnt = 29
 frames = [PhotoImage(file='foto/loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
 def update(ind):
@@ -356,7 +368,7 @@ def update(ind):
     screen.frame.after(100, update, ind)
 
 def loadGif():    
-    screen.Giflabel.place(x=int(screen.sW*0.5),y=int(screen.sH*0.5),width = 150,height=150,anchor=CENTER)
+    screen.Giflabel.place(x=SCREENWIDTH_unscaled*0.5,y=SCREENHEIGHT_unscaled*0.5,width = 150,height=150,anchor=CENTER)
     screen.frame.after(0, update, 0)
 class Page2:
     def __init__(self):
@@ -390,18 +402,26 @@ class Page2:
         self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
     def pdf(self):
-        #self.help.after(0,loadGif)
-        threadPdf.set()
+        global flag
+        if flag == 0:
+            self.help.after(0,loadGif)
+            threadPdf.set()
+            flag=1
+        else:
+            messagebox.showerror("warning","File PDF MANUAL CALCULATION SUDAH TERBUKA SILAHKAN CEK PADA TASKBAR ANDA")
 def kill():
     print("lontong")
-    unloading()
+    screen.unloading()
 def timer():
+    global flag,proc
     while True:
         time.sleep(0.1)
+        print(flag)
         if threadPdf.is_set():
             threadPdf.clear()
             screen.frame.after(1000,kill)
             os.system("pdf.pdf")
+            flag=0
 
             
 
