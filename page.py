@@ -3,6 +3,7 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import messagebox
 import math
+import os
 scaleW=1
 scaleH=1
 root=Tk()
@@ -357,7 +358,7 @@ class Page2:
         self.pdfImage = ImageTk.PhotoImage(self.photo2)
 
         self.labelImage=Label(self.help,width=int(screen.sW*0.44),height= int(screen.sH*0.9),bg="WHITE")
-        self.pdfBtn=Button(self.help,activebackground="#1F4DC5",bg="#1F4DC5",borderwidth=0,image=self.pdfImage)
+        self.pdfBtn=Button(self.help,command=self.pdf,activebackground="#1F4DC5",bg="#1F4DC5",borderwidth=0,image=self.pdfImage)
         
     def show(self):
         self.frame.place(x=0,y=0,width=int(screen.sW*0.44),height=int(screen.sH*0.9))
@@ -365,7 +366,8 @@ class Page2:
         self.labelImage.config(image=self.helpPageImage)
         self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
-        
+    def pdf(self):
+        os.system("foto/pdf.png")
   
 
 
