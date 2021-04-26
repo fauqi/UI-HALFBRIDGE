@@ -172,7 +172,7 @@ class Page:
     def history(self):
         pass
     def help(self):
-        Page2()
+        self.page=Page2()
 
         
     def enter(self,event):
@@ -356,7 +356,7 @@ def update(ind):
     screen.frame.after(100, update, ind)
 
 def loadGif():    
-    screen.Giflabel.place(x=screen.sW*0.5,y=screen.sH*0.5,width = 150,height=150,anchor=CENTER)
+    screen.Giflabel.place(x=int(screen.sW*0.5),y=int(screen.sH*0.5),width = 150,height=150,anchor=CENTER)
     screen.frame.after(0, update, 0)
 class Page2:
     def __init__(self):
@@ -390,16 +390,19 @@ class Page2:
         self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
     def pdf(self):
-        self.help.after(0,loadGif)
+        #self.help.after(0,loadGif)
         threadPdf.set()
-
+def kill():
+    print("lontong")
+    unloading()
 def timer():
     while True:
         time.sleep(0.1)
         if threadPdf.is_set():
-            os.system("pdf.pdf")
-            root.after(10,unloading)
             threadPdf.clear()
+            screen.frame.after(1000,kill)
+            os.system("pdf.pdf")
+
             
 
 threadPdf=threading.Event()
