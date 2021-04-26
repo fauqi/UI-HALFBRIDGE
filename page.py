@@ -31,7 +31,7 @@ class FullScreenApp(object):
             self.master.overrideredirect(False)
             self.flag=1
             scaleH=0.9259
-            
+    
 
         else:
             self.master.overrideredirect(True)
@@ -67,6 +67,7 @@ class Page:
         self.showLayar()
         
     def page_init(self):
+        self.Giflabel = Label(root)
         self.frame.place_forget()
         self.frame2.place_forget()
         self.photo=Image.open("foto/awal.png")
@@ -345,7 +346,7 @@ screen = Page(root)
 def unloading():
     screen.Giflabel.place_forget()
 frameCnt = 29
-frames = [PhotoImage(file='loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
+frames = [PhotoImage(file='foto/loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
 def update(ind):
     frame = frames[ind]
     ind += 1
@@ -360,10 +361,14 @@ def loadGif():
 class Page2:
     def __init__(self):
         self.help=Toplevel()
+        self.help.bind('<Escape>',app.escape)
+        self.help.bind('<F>',app.full)
+        self.help.bind('<f>',app.full)
         self.help.title("HELP")
         self.a=int(0.55*screen.sW)
         self.help.geometry("%dx%d+%d+0" % (int(screen.sW*0.44), int(screen.sH*0.9),self.a))
         self.frame=Frame(self.help)
+        #root.after(0,loadGif)
         self.page_init()
         self.show()
     def page_init(self):
@@ -373,7 +378,7 @@ class Page2:
         self.photo2=Image.open("foto/pdf.png")
         self.photo2= self.photo2.resize((int(screen.sW*0.0458), int(screen.sH*0.077)), Image.ANTIALIAS)
         self.pdfImage = ImageTk.PhotoImage(self.photo2)
-        self.Giflabel = Label(root)
+        
 
         self.labelImage=Label(self.help,width=int(screen.sW*0.44),height= int(screen.sH*0.9),bg="WHITE")
         self.pdfBtn=Button(self.help,command=self.pdf,activebackground="#1F4DC5",bg="#1F4DC5",borderwidth=0,image=self.pdfImage)
@@ -385,18 +390,21 @@ class Page2:
         self.pdfBtn.place(y=screen.sH*0.715,x=screen.sW*0.061,width=screen.sW*0.0458,height=screen.sH*0.077,anchor=NW)
         self.help.mainloop()
     def pdf(self):
-        root.after(0,loadGif)
+        self.help.after(0,loadGif)
         threadPdf.set()
-        
+
 def timer():
     while True:
         time.sleep(0.1)
         if threadPdf.is_set():
             os.system("pdf.pdf")
-            screen.frame.after(100,unloading)
+            root.after(10,unloading)
+            threadPdf.clear()
+            
 
 threadPdf=threading.Event()
 t1= threading.Thread(target=timer)
 t1.start()
-screen = Page(root)
+
+
 root.mainloop()
