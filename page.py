@@ -196,11 +196,12 @@ class Page:
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         self.master.unbind('<Return>')
     def calculate(self):
-        # try:
-        #     self.hitung()
+        try:
+            self.hitung()
             
-        # except:
-        #      messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan")
+        except ValueError :
+             messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan dan pastikan semua parameter terisi(jika tidak digunakan isi dengan nol(0))")
+
         self.hitung()
     def reset(self):
         for x in range(5):
@@ -416,7 +417,7 @@ def timer():
     global flag,proc
     while True:
         time.sleep(0.1)
-        print(flag)
+
         if threadPdf.is_set():
             threadPdf.clear()
             screen.frame.after(1000,kill)
