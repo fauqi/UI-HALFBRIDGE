@@ -25,7 +25,9 @@ j=[]
 s=[]
 sigma_split=[]
 tfall=[]
+cnt=0
 
+fulltext=[0 for x in range(88)]  
 flag=0
 scaleW=1
 scaleH=1
@@ -156,8 +158,8 @@ class Page:
         for j in range(5):
             for k in range(5):    
                 self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
-        for z in range(5):
-            self.btnHistory[z]=Button(self.frame3,image=self.historyBarImage,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
+        for z in range(80):
+            self.btnHistory[z]=Button(self.frame3,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
         
 
     def close(self):
@@ -218,6 +220,8 @@ class Page:
    
         self.master.bind('<Return>',self.enter)
     def history(self):
+        global vinMax
+        a = len(vinMax)
         self.frame3.place(x=self.sW*0.68,y=self.sH*0.036,width=self.sW*0.312,height=self.sH*0.683)
         self.labelImage3.place(x=0,y=0,height=self.sH*0.683,width=self.sW*0.312)
         self.closeBtn.place(x=self.sW*0.289,y=self.sH*0.0117,width=self.sW*0.0145,height=self.sH*0.027)
@@ -226,7 +230,7 @@ class Page:
         offsetW = self.sW*0.00729
         width = self.sW*0.296
         height = self.sH*0.083
-        for x in range(5):
+        for x in range(a):
             self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
         
     def help(self):
@@ -248,33 +252,57 @@ class Page:
         except ValueError :
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan dan pastikan semua parameter terisi(jika tidak digunakan isi dengan nol(0))")
 
-        self.hitung()
+        
     def reset(self):
         for x in range(5):
             for y in range(5):
                 self.entry[x][y].delete(0,END)
     def hitung(self):
+        global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
+        
         self.vinMax=float(self.entry[0][0].get())
         self.vinMin=float(self.entry[1][0].get())
         self.vOut=float(self.entry[2][0].get())
         self.iOut=float(self.entry[3][0].get())
         self.duty=float(self.entry[4][0].get())
+        vinMax.append(self.vinMax)
+        vinMin.append(self.vinMin)
+        vOut.append(self.vOut)
+        iOut.append(self.iOut)
+        duty.append(self.duty)
+        fulltext[cnt]="vinMax="+str(vinMax)
+        self.btnHistory[cnt].config(text=fulltext[cnt])
 
         self.frekuensi=float(self.entry[0][1].get())
         self.rIl=float(self.entry[1][1].get())
         self.rVo=float(self.entry[2][1].get())
         self.vf=float(self.entry[3][1].get())
         self.acInd=float(self.entry[4][1].get())
+        frekuensi.append(self.frekuensi)
+        rIl.append(self.rIl)
+        rVo.append(self.rVo)
+        Vf.append(self.vf)
+        ac_ind.append(self.acInd)
 
         self.dBobInd=float(self.entry[0][2].get())
         self.acTraf=float(self.entry[1][2].get())
         self.dBobTraf=float(self.entry[2][2].get())
         self.bMax=float(self.entry[3][2].get())
         self.J=float(self.entry[4][2].get())
+        dBob_ind.append(self.dBobInd)
+        ac_trafo.append(self.acTraf)
+        dBob_trafo.append(self.dBobTraf)
+        bMax.append(self.bMax)
+        j.append(self.J)
+
 
         self.s=float(self.entry[0][3].get())
         self.sigmaSplit=float(self.entry[1][3].get())
         self.tfall=float(self.entry[2][3].get())
+        s.append(self.s)
+        sigma_split.append(self.sigmaSplit)
+        tfall.append(self.sigmaSplit)
+        
         #RUMUS
         self.duty=self.duty/100
         self.frekuensi=self.frekuensi*1000
@@ -357,8 +385,7 @@ class Page:
         self.outLabel[2][3].config(text="{:.2f}".format(self.length_s))
         self.outLabel[4][1].config(text="{:.2f}".format(self.Rs))
         self.outLabel[3][3].config(text="{:.2f}".format(self.Cs))
-
-
+        cnt=cnt+1
 
     
     def default(self):
