@@ -39,7 +39,26 @@ SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
 SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
-
+def clear(s):
+    result=""
+    for i in s:
+        if i !='[' and i !=']':
+            result=result+i
+    return(result)
+def splitter(s,maksChar):
+    total =0
+    result=""
+    c = s.split()
+    for i in range(len(c)):
+        counter=len(c[i])
+        total=total+counter
+       # print(total)
+        if(total<maksChar):
+            result=result+" "+c[i]
+        else :
+            result=result+"\n"+c[i]
+            total=0
+    return (result)
 # root.resizable(True,True)
 class FullScreenApp(object):
     def __init__(self, master, **kwargs):
@@ -89,7 +108,8 @@ class Page:
         self.frame3=Frame(self.master,bg="#D7D3D3")
         self.entry =[[0 for x in range(5)]  for x in range(5)]
         self.outLabel =[[0 for x in range(5)]  for x in range(5)]
-        self.btnHistory=[0 for x in range(88)]  
+        self.btnHistory=[0 for x in range(88)]
+        self.labelHistory=[0 for x in range(88)]   
         self.page_init()
         self.showLayar()
         self.master.bind('<Enter>',self.off)
@@ -159,8 +179,8 @@ class Page:
             for k in range(5):    
                 self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
         for z in range(80):
-            self.btnHistory[z]=Button(self.frame3,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
-        
+            self.btnHistory[z]=Button(self.frame3,image=self.historyBarImage,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
+            self.labelHistory[z]=Label(self.frame3,bg="WHITE",borderwidth=0)  
 
     def close(self):
         self.frame3.place_forget()
@@ -225,13 +245,21 @@ class Page:
         self.frame3.place(x=self.sW*0.68,y=self.sH*0.036,width=self.sW*0.312,height=self.sH*0.683)
         self.labelImage3.place(x=0,y=0,height=self.sH*0.683,width=self.sW*0.312)
         self.closeBtn.place(x=self.sW*0.289,y=self.sH*0.0117,width=self.sW*0.0145,height=self.sH*0.027)
-        jarak = self.sH*0.0093
+        jarak = self.sH*0.0094
         offsetH= self.sH*0.0732
         offsetW = self.sW*0.00729
         width = self.sW*0.296
         height = self.sH*0.083
+
+        jarak2 = self.sH*0.03
+        offsetH2= self.sH*0.083
+        offsetW2 = self.sW*0.0625
+        width2 = self.sW*0.222
+        height2 = self.sH*0.063
+        
         for x in range(a):
             self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
+            self.labelHistory[x].place(x=offsetW2,y=offsetH2+(x*(jarak2+height2)),width=width2,height=height2)
         
     def help(self):
         self.page=Page2()
@@ -270,8 +298,8 @@ class Page:
         vOut.append(self.vOut)
         iOut.append(self.iOut)
         duty.append(self.duty)
-        fulltext[cnt]="vinMax="+str(vinMax)
-        self.btnHistory[cnt].config(text=fulltext[cnt])
+
+
 
         self.frekuensi=float(self.entry[0][1].get())
         self.rIl=float(self.entry[1][1].get())
@@ -283,6 +311,8 @@ class Page:
         rVo.append(self.rVo)
         Vf.append(self.vf)
         ac_ind.append(self.acInd)
+        
+
 
         self.dBobInd=float(self.entry[0][2].get())
         self.acTraf=float(self.entry[1][2].get())
@@ -295,6 +325,8 @@ class Page:
         bMax.append(self.bMax)
         j.append(self.J)
 
+        fulltext[cnt]="vinMax="+str(vinMax[cnt])+"v"+" vinMin="+str(vinMin[cnt])+"v"+" vOut="+str(vOut[cnt])+"v"+" Iout="+str(iOut[cnt])+"A"+" D="+str(duty[cnt])+"%"+" f="+str(frekuensi[cnt])+"kHz"+" rIl="+str(rIl[cnt])+"%"+" rVo="+str(rVo[cnt])+"%"+" Vf="+str(Vf[cnt])+"volt"+" ac_ind="+str(ac_ind[cnt])+"cm2"+" dBob_ind="+str(dBob_ind[cnt])+"mm"+" ac_trafo="+str(ac_trafo[cnt])+"cm2"
+        self.labelHistory[cnt].config(text=splitter(fulltext[cnt],50))
 
         self.s=float(self.entry[0][3].get())
         self.sigmaSplit=float(self.entry[1][3].get())
@@ -389,46 +421,46 @@ class Page:
 
     
     def default(self):
-        if self.entry[0][0].get() == "":
-            self.vinMax=100
-            self.entry[0][0].insert(0,str(self.vinMax))
-            self.vinMin=100
-            self.entry[1][0].insert(0,str(self.vinMin))
-            self.vOut=19
-            self.entry[2][0].insert(0,str(self.vOut))
-            self.iOut=3
-            self.entry[3][0].insert(0,str(self.iOut))
-            self.duty=40
-            self.entry[4][0].insert(0,str(self.duty))
+        
+        self.vinMax=100
+        self.entry[0][0].insert(0,str(self.vinMax))
+        self.vinMin=100
+        self.entry[1][0].insert(0,str(self.vinMin))
+        self.vOut=19
+        self.entry[2][0].insert(0,str(self.vOut))
+        self.iOut=3
+        self.entry[3][0].insert(0,str(self.iOut))
+        self.duty=40
+        self.entry[4][0].insert(0,str(self.duty))
 
-            self.frekuensi=40
-            self.entry[0][1].insert(0,str(self.frekuensi))
-            self.rIl=20
-            self.entry[1][1].insert(0,str(self.rIl))
-            self.rVo=0.1
-            self.entry[2][1].insert(0,str(self.rVo))
-            self.vf=1.2
-            self.entry[3][1].insert(0,str(self.vf))
-            self.acInd=1.61
-            self.entry[4][1].insert(0,str(self.acInd))
+        self.frekuensi=40
+        self.entry[0][1].insert(0,str(self.frekuensi))
+        self.rIl=20
+        self.entry[1][1].insert(0,str(self.rIl))
+        self.rVo=0.1
+        self.entry[2][1].insert(0,str(self.rVo))
+        self.vf=1.2
+        self.entry[3][1].insert(0,str(self.vf))
+        self.acInd=1.61
+        self.entry[4][1].insert(0,str(self.acInd))
 
-            self.dBobInd=16
-            self.entry[0][2].insert(0,str(self.dBobInd))
-            self.acTraf=1.96
-            self.entry[1][2].insert(0,str(self.acTraf))
-            self.dBobTraf=17
-            self.entry[2][2].insert(0,str(self.dBobTraf))
-            self.bMax=0.25
-            self.entry[3][2].insert(0,str(self.bMax))
-            self.J=4.5
-            self.entry[4][2].insert(0,str(self.J))
+        self.dBobInd=16
+        self.entry[0][2].insert(0,str(self.dBobInd))
+        self.acTraf=1.96
+        self.entry[1][2].insert(0,str(self.acTraf))
+        self.dBobTraf=17
+        self.entry[2][2].insert(0,str(self.dBobTraf))
+        self.bMax=0.25
+        self.entry[3][2].insert(0,str(self.bMax))
+        self.J=4.5
+        self.entry[4][2].insert(0,str(self.J))
 
-            self.s=4.5
-            self.entry[0][3].insert(0,str(self.s))
-            self.sigmaSplit=10
-            self.entry[1][3].insert(0,str(self.sigmaSplit))
-            self.tfall=75
-            self.entry[2][3].insert(0,str(self.tfall))
+        self.s=4.5
+        self.entry[0][3].insert(0,str(self.s))
+        self.sigmaSplit=10
+        self.entry[1][3].insert(0,str(self.sigmaSplit))
+        self.tfall=75
+        self.entry[2][3].insert(0,str(self.tfall))
 screen = Page(root)
 
 frameCnt = 29
