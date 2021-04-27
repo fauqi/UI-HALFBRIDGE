@@ -121,6 +121,7 @@ class Page:
         # os._exit()
         #sys.exit()
     def page_init(self):
+        x=0
         self.Giflabel = Label(root)
         self.frame.place_forget()
         self.frame2.place_forget()
@@ -180,8 +181,51 @@ class Page:
                 self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
         for z in range(80):
             self.btnHistory[z]=Button(self.frame3,image=self.historyBarImage,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
+            self.btnHistory[z].config(command=lambda x=z:self.btnHistory_func(x))
             self.labelHistory[z]=Label(self.frame3,bg="WHITE",borderwidth=0)  
+    def btnHistory_func(self,x):
+        global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
+        print(x)
+        self.reset()
+        self.vinMax=vinMax[x]
+        self.entry[0][0].insert(0,str(self.vinMax))
+        self.vinMin=vinMin[x]
+        self.entry[1][0].insert(0,str(self.vinMin))
+        self.vOut=vOut[x]
+        self.entry[2][0].insert(0,str(self.vOut))
+        self.iOut=iOut[x]
+        self.entry[3][0].insert(0,str(self.iOut))
+        self.duty=duty[x]
+        self.entry[4][0].insert(0,str(self.duty))
 
+        self.frekuensi=frekuensi[x]
+        self.entry[0][1].insert(0,str(self.frekuensi))
+        self.rIl=rIl[x]
+        self.entry[1][1].insert(0,str(self.rIl))
+        self.rVo=rVo[x]
+        self.entry[2][1].insert(0,str(self.rVo))
+        self.vf=Vf[x]
+        self.entry[3][1].insert(0,str(self.vf))
+        self.acInd=ac_ind[x]
+        self.entry[4][1].insert(0,str(self.acInd))
+
+        self.dBobInd=dBob_ind[x]
+        self.entry[0][2].insert(0,str(self.dBobInd))
+        self.acTraf=ac_trafo[x]
+        self.entry[1][2].insert(0,str(self.acTraf))
+        self.dBobTraf=dBob_trafo[x]
+        self.entry[2][2].insert(0,str(self.dBobTraf))
+        self.bMax=bMax[x]
+        self.entry[3][2].insert(0,str(self.bMax))
+        self.J=j[x]
+        self.entry[4][2].insert(0,str(self.J))
+
+        self.s=[x]
+        self.entry[0][3].insert(0,str(self.s))
+        self.sigmaSplit=sigma_split[x]
+        self.entry[1][3].insert(0,str(self.sigmaSplit))
+        self.tfall=tfall[x]
+        self.entry[2][3].insert(0,str(self.tfall))
     def close(self):
         self.frame3.place_forget()
     def unloading(self):
@@ -240,26 +284,12 @@ class Page:
    
         self.master.bind('<Return>',self.enter)
     def history(self):
-        global vinMax
+        global vinMax,cnt
         a = len(vinMax)
         self.frame3.place(x=self.sW*0.68,y=self.sH*0.036,width=self.sW*0.312,height=self.sH*0.683)
         self.labelImage3.place(x=0,y=0,height=self.sH*0.683,width=self.sW*0.312)
         self.closeBtn.place(x=self.sW*0.289,y=self.sH*0.0117,width=self.sW*0.0145,height=self.sH*0.027)
-        jarak = self.sH*0.0094
-        offsetH= self.sH*0.0732
-        offsetW = self.sW*0.00729
-        width = self.sW*0.296
-        height = self.sH*0.083
 
-        jarak2 = self.sH*0.03
-        offsetH2= self.sH*0.083
-        offsetW2 = self.sW*0.0625
-        width2 = self.sW*0.222
-        height2 = self.sH*0.063
-        
-        for x in range(a):
-            self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
-            self.labelHistory[x].place(x=offsetW2,y=offsetH2+(x*(jarak2+height2)),width=width2,height=height2)
         
     def help(self):
         self.page=Page2()
@@ -274,12 +304,30 @@ class Page:
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
         self.master.unbind('<Return>')
     def calculate(self):
+        global vinMax,cnt
         try:
             self.hitung()
             
         except ValueError :
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan dan pastikan semua parameter terisi(jika tidak digunakan isi dengan nol(0))")
+        a=len(vinMax)
+        jarak = self.sH*0.0094
+        offsetH= self.sH*0.0732
+        offsetW = self.sW*0.00729
+        width = self.sW*0.296
+        height = self.sH*0.083
 
+        jarak2 = self.sH*0.03
+        offsetH2= self.sH*0.083
+        offsetW2 = self.sW*0.0625
+        width2 = self.sW*0.222
+        height2 = self.sH*0.063
+        
+        print(cnt)
+        for x in range(a):
+            if cnt < 7:
+                self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
+                self.labelHistory[x].place(x=offsetW2,y=offsetH2+(x*(jarak2+height2)),width=width2,height=height2)
         
     def reset(self):
         for x in range(5):
@@ -343,7 +391,8 @@ class Page:
         self.dBobInd=self.dBobInd/10
         self.tfall=self.tfall*0.000000001
         self.rasio = self.vOut/(self.vinMax*self.duty)
-        self.outLabel[0][0].config(text=str(self.rasio))
+        
+        print(self.rasio)
 
         #Lx
         self.vin_a=self.vinMax/(2*(1/self.rasio)-(2*self.vf))
@@ -417,6 +466,7 @@ class Page:
         self.outLabel[2][3].config(text="{:.2f}".format(self.length_s))
         self.outLabel[4][1].config(text="{:.2f}".format(self.Rs))
         self.outLabel[3][3].config(text="{:.2f}".format(self.Cs))
+        self.outLabel[0][0].config(text="{:.2f}".format(self.rasio))
         cnt=cnt+1
 
     
