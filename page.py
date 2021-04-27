@@ -52,7 +52,7 @@ def splitter(s,maksChar):
     for i in range(len(c)):
         counter=len(c[i])
         total=total+counter
-       # print(total)
+     
         if(total<maksChar):
             result=result+" "+c[i]
         else :
@@ -186,7 +186,7 @@ class Page:
             self.labelHistory[z]=Label(self.frame3,bg="WHITE",borderwidth=0)  
     def btnHistory_func(self,x):
         global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
-        print(x)
+        
         self.reset()
         self.vinMax=vinMax[x]
         self.entry[0][0].insert(0,str(self.vinMax))
@@ -290,8 +290,10 @@ class Page:
         self.frame3.place(x=self.sW*0.68,y=self.sH*0.036,width=self.sW*0.312,height=self.sH*0.683)
         self.labelImage3.place(x=0,y=0,height=self.sH*0.683,width=self.sW*0.312)
         self.closeBtn.place(x=self.sW*0.289,y=self.sH*0.0117,width=self.sW*0.0145,height=self.sH*0.027)
-
-        
+        for x in range (a):
+            self.labelHistory[x].bind('<Button-1>',lambda event,obj=x:self.btnHistory_event(event,obj))
+    def btnHistory_event(self,event,a):
+        self.btnHistory_func(a)
     def help(self):
         self.page=Page2()
 
@@ -324,12 +326,14 @@ class Page:
         width2 = self.sW*0.222
         height2 = self.sH*0.063
         
-        print(cnt)
+       
         for x in range(a):
-            if cnt < 7:
+            if x < 6:
                 self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
                 self.labelHistory[x].place(x=offsetW2,y=offsetH2+(x*(jarak2+height2)),width=width2,height=height2)
-        
+                fulltext[x]="vinMax="+str(vinMax[x])+"v"+" vinMin="+str(vinMin[x])+"v"+" vOut="+str(vOut[x])+"v"+" Iout="+str(iOut[x])+"A"+" D="+str(duty[x])+"%"+" f="+str(frekuensi[x])+"kHz"+" rIl="+str(rIl[x])+"%"+" rVo="+str(rVo[x])+"%"+" Vf="+str(Vf[x])+"volt"+" ac_ind="+str(ac_ind[x])+"cm2"+" dBob_ind="+str(dBob_ind[x])+"mm"+" ac_trafo="+str(ac_trafo[x])+"cm2"
+                self.labelHistory[x].config(text=splitter(fulltext[x],50))
+
     def reset(self):
         for x in range(5):
             for y in range(5):
@@ -342,11 +346,11 @@ class Page:
         self.vOut=float(self.entry[2][0].get())
         self.iOut=float(self.entry[3][0].get())
         self.duty=float(self.entry[4][0].get())
-        vinMax.append(self.vinMax)
-        vinMin.append(self.vinMin)
-        vOut.append(self.vOut)
-        iOut.append(self.iOut)
-        duty.append(self.duty)
+        vinMax.insert(0,self.vinMax)
+        vinMin.insert(0,self.vinMin)
+        vOut.insert(0,self.vOut)
+        iOut.insert(0,self.iOut)
+        duty.insert(0,self.duty)
 
 
 
@@ -355,11 +359,11 @@ class Page:
         self.rVo=float(self.entry[2][1].get())
         self.vf=float(self.entry[3][1].get())
         self.acInd=float(self.entry[4][1].get())
-        frekuensi.append(self.frekuensi)
-        rIl.append(self.rIl)
-        rVo.append(self.rVo)
-        Vf.append(self.vf)
-        ac_ind.append(self.acInd)
+        frekuensi.insert(0,self.frekuensi)
+        rIl.insert(0,self.rIl)
+        rVo.insert(0,self.rVo)
+        Vf.insert(0,self.vf)
+        ac_ind.insert(0,self.acInd)
         
 
 
@@ -368,21 +372,19 @@ class Page:
         self.dBobTraf=float(self.entry[2][2].get())
         self.bMax=float(self.entry[3][2].get())
         self.J=float(self.entry[4][2].get())
-        dBob_ind.append(self.dBobInd)
-        ac_trafo.append(self.acTraf)
-        dBob_trafo.append(self.dBobTraf)
-        bMax.append(self.bMax)
-        j.append(self.J)
+        dBob_ind.insert(0,self.dBobInd)
+        ac_trafo.insert(0,self.acTraf)
+        dBob_trafo.insert(0,self.dBobTraf)
+        bMax.insert(0,self.bMax)
+        j.insert(0,self.J)
 
-        fulltext[cnt]="vinMax="+str(vinMax[cnt])+"v"+" vinMin="+str(vinMin[cnt])+"v"+" vOut="+str(vOut[cnt])+"v"+" Iout="+str(iOut[cnt])+"A"+" D="+str(duty[cnt])+"%"+" f="+str(frekuensi[cnt])+"kHz"+" rIl="+str(rIl[cnt])+"%"+" rVo="+str(rVo[cnt])+"%"+" Vf="+str(Vf[cnt])+"volt"+" ac_ind="+str(ac_ind[cnt])+"cm2"+" dBob_ind="+str(dBob_ind[cnt])+"mm"+" ac_trafo="+str(ac_trafo[cnt])+"cm2"
-        self.labelHistory[cnt].config(text=splitter(fulltext[cnt],50))
 
         self.s=float(self.entry[0][3].get())
         self.sigmaSplit=float(self.entry[1][3].get())
         self.tfall=float(self.entry[2][3].get())
-        s.append(self.s)
-        sigma_split.append(self.sigmaSplit)
-        tfall.append(self.sigmaSplit)
+        s.insert(0,self.s)
+        sigma_split.insert(0,self.sigmaSplit)
+        tfall.insert(0,self.sigmaSplit)
         
         #RUMUS
         self.duty=self.duty/100
@@ -392,8 +394,7 @@ class Page:
         self.dBobInd=self.dBobInd/10
         self.tfall=self.tfall*0.000000001
         self.rasio = self.vOut/(self.vinMax*self.duty)
-        
-        print(self.rasio)
+       
 
         #Lx
         self.vin_a=self.vinMax/(2*(1/self.rasio)-(2*self.vf))
@@ -567,7 +568,7 @@ class Page2:
         else:
             messagebox.showerror("warning","File PDF MANUAL CALCULATION SUDAH TERBUKA SILAHKAN CEK PADA TASKBAR ANDA")
 def kill():
-    print("lontong")
+    
     screen.unloading()
 def timer():
     global flag,proc
