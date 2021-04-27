@@ -110,6 +110,7 @@ class Page:
         self.outLabel =[[0 for x in range(5)]  for x in range(5)]
         self.btnHistory=[0 for x in range(88)]
         self.labelHistory=[0 for x in range(88)]   
+        self.indeks=0
         self.page_init()
         self.showLayar()
         self.master.bind('<Enter>',self.off)
