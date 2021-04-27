@@ -221,7 +221,7 @@ class Page:
         self.J=j[x]
         self.entry[4][2].insert(0,str(self.J))
 
-        self.s=[x]
+        self.s=s[x]
         self.entry[0][3].insert(0,str(self.s))
         self.sigmaSplit=sigma_split[x]
         self.entry[1][3].insert(0,str(self.sigmaSplit))
