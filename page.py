@@ -7,6 +7,25 @@ import os
 import threading
 import time
 
+vinMax=[]
+vinMin=[]
+vOut=[]
+iOut=[]
+duty=[]
+frekuensi=[]
+rIl=[]
+rVo=[]
+Vf=[]
+ac_ind=[]
+dBob_ind=[]
+ac_trafo=[]
+dBob_trafo=[]
+bMax=[]
+j=[]
+s=[]
+sigma_split=[]
+tfall=[]
+
 flag=0
 scaleW=1
 scaleH=1
