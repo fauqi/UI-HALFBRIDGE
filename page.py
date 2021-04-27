@@ -65,8 +65,10 @@ class Page:
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="RED")
         self.frame2=Frame(self.master,bg="RED")
+        self.frame3=Frame(self.master,bg="#D7D3D3")
         self.entry =[[0 for x in range(5)]  for x in range(5)]
         self.outLabel =[[0 for x in range(5)]  for x in range(5)]
+        self.btnHistory=[0 for x in range(88)]  
         self.page_init()
         self.showLayar()
         self.master.bind('<Enter>',self.off)
@@ -81,6 +83,7 @@ class Page:
         self.Giflabel = Label(root)
         self.frame.place_forget()
         self.frame2.place_forget()
+        self.frame3.place_forget()
         self.photo=Image.open("foto/awal.png")
         self.photo = self.photo.resize((self.sW, self.sH), Image.ANTIALIAS)
         self.gambar = ImageTk.PhotoImage(self.photo)
@@ -105,10 +108,19 @@ class Page:
         self.photo8=Image.open("foto/history.png")
         self.photo8= self.photo8.resize((int(self.sW*0.062), int(self.sH*0.036)), Image.ANTIALIAS)
         self.historyImage = ImageTk.PhotoImage(self.photo8)
-
+        self.photo9=Image.open("foto/history_page.png")
+        self.photo9= self.photo9.resize((int(self.sW*0.312), int(self.sH*0.683)), Image.ANTIALIAS)
+        self.historyPageImage = ImageTk.PhotoImage(self.photo9)
+        self.photo10=Image.open("foto/history_bar.png")
+        self.photo10= self.photo10.resize((int(self.sW*0.296), int(self.sH*0.083)), Image.ANTIALIAS)
+        self.historyBarImage = ImageTk.PhotoImage(self.photo10)
+        self.photo11=Image.open("foto/close.png")
+        self.photo11= self.photo11.resize((int(self.sW*0.0145), int(self.sH*0.027)), Image.ANTIALIAS)
+        self.closeImage = ImageTk.PhotoImage(self.photo11)
 
         self.labelImage=Label(self.frame,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar)
         self.labelImage2=Label(self.frame2,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar2)
+        self.labelImage3=Label(self.frame3,height=self.sH*0.683,width=self.sW*0.312,image=self.historyPageImage)
         self.exitButton = Button(self.frame,command=self.exit,bg="#9561EB",text="EXIT",font='Helvetica 30 bold')
         self.startButton = Button(self.frame,command=self.start,bg="#EF5858",text="START",font='Helvetica 30 bold')
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
@@ -117,6 +129,7 @@ class Page:
         self.defaultBtn=Button(self.frame2,command=self.default,image=self.defaultImage,activebackground="#67B840",bg="#67B840",borderwidth=0)
         self.helpBtn=Button(self.frame2,command=self.help,image=self.helpImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
         self.historyBtn=Button(self.frame2,command=self.history,image=self.historyImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
+        self.closeBtn=Button(self.frame3,command=self.close,image=self.closeImage,activebackground="#687BDC",bg="#687BDC",borderwidth=0)
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(5):
             for y in range(5):    
@@ -124,8 +137,12 @@ class Page:
         for j in range(5):
             for k in range(5):    
                 self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
+        for z in range(5):
+            self.btnHistory[z]=Button(self.frame3,image=self.historyBarImage,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
+        
 
-
+    def close(self):
+        self.frame3.place_forget()
     def unloading(self):
         self.Giflabel.place_forget()
     def showLayar(self):
@@ -182,7 +199,17 @@ class Page:
    
         self.master.bind('<Return>',self.enter)
     def history(self):
-        pass
+        self.frame3.place(x=self.sW*0.68,y=self.sH*0.036,width=self.sW*0.312,height=self.sH*0.683)
+        self.labelImage3.place(x=0,y=0,height=self.sH*0.683,width=self.sW*0.312)
+        self.closeBtn.place(x=self.sW*0.289,y=self.sH*0.0117,width=self.sW*0.0145,height=self.sH*0.027)
+        jarak = self.sH*0.0093
+        offsetH= self.sH*0.0732
+        offsetW = self.sW*0.00729
+        width = self.sW*0.296
+        height = self.sH*0.083
+        for x in range(5):
+            self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
+        
     def help(self):
         self.page=Page2()
 
