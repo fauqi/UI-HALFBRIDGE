@@ -39,6 +39,7 @@ SCREENWIDTH = int(root.winfo_screenwidth()*scaleW)
 SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
 root.overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
+root.iconbitmap('logo.ico')
 def clear(s):
     result=""
     for i in s:
@@ -101,6 +102,7 @@ class Page:
         SCREENHEIGHT = int(root.winfo_screenheight()*scaleH)
         master.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
         self.master=master
+        self.master.title("HALF BRIDGE CALCULATION SOFTWARE")
         self.sW=SCREENWIDTH
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="RED")
@@ -534,7 +536,7 @@ class Page2:
         self.help.bind('<Escape>',app.escape)
         self.help.bind('<F>',app.full)
         self.help.bind('<f>',app.full)
-        self.help.title("HELP")
+        self.help.title("HELP PAGE")
         self.a=int(0.55*screen.sW)
         self.help.geometry("%dx%d+%d+0" % (int(screen.sW*0.44), int(screen.sH*0.9),self.a))
         self.frame=Frame(self.help)
