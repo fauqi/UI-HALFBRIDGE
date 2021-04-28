@@ -186,6 +186,7 @@ class Page:
             self.btnHistory[z]=Button(self.frame3,image=self.historyBarImage,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
             self.btnHistory[z].config(command=lambda x=z:self.btnHistory_func(x))
             self.labelHistory[z]=Label(self.frame3,bg="WHITE",borderwidth=0)  
+        self.show_historyPage()
     def btnHistory_func(self,x):
         global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
         
@@ -315,6 +316,9 @@ class Page:
             
         except ValueError :
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan dan pastikan semua parameter terisi(jika tidak digunakan isi dengan nol(0))")
+        self.show_historyPage()
+    def show_historyPage(self):
+        global vinMax,cnt
         a=len(vinMax)
         jarak = self.sH*0.0094
         offsetH= self.sH*0.0732
@@ -335,7 +339,6 @@ class Page:
                 self.labelHistory[x].place(x=offsetW2,y=offsetH2+(x*(jarak2+height2)),width=width2,height=height2)
                 fulltext[x]="vinMax="+str(vinMax[x])+"v"+" vinMin="+str(vinMin[x])+"v"+" vOut="+str(vOut[x])+"v"+" Iout="+str(iOut[x])+"A"+" D="+str(duty[x])+"%"+" f="+str(frekuensi[x])+"kHz"+" rIl="+str(rIl[x])+"%"+" rVo="+str(rVo[x])+"%"+" Vf="+str(Vf[x])+"volt"+" ac_ind="+str(ac_ind[x])+"cm2"+" dBob_ind="+str(dBob_ind[x])+"mm"+" ac_trafo="+str(ac_trafo[x])+"cm2"
                 self.labelHistory[x].config(text=splitter(fulltext[x],50))
-
     def reset(self):
         for x in range(5):
             for y in range(5):
@@ -386,7 +389,7 @@ class Page:
         self.tfall=float(self.entry[2][3].get())
         s.insert(0,self.s)
         sigma_split.insert(0,self.sigmaSplit)
-        tfall.insert(0,self.sigmaSplit)
+        tfall.insert(0,self.tfall)
         
         #RUMUS
         self.duty=self.duty/100
