@@ -313,10 +313,11 @@ class Page:
         global vinMax,cnt
         try:
             self.hitung()
+            self.show_historyPage()
             
         except ValueError :
              messagebox.showerror("warning","ganti koma(,) dengan titik(.) untuk pecahan dan pastikan semua parameter terisi(jika tidak digunakan isi dengan nol(0))")
-        self.show_historyPage()
+        
     def show_historyPage(self):
         global vinMax,cnt
         a=len(vinMax)
