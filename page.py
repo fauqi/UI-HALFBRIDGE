@@ -166,6 +166,7 @@ class Page:
         self.labelImage2=Label(self.frame2,height=SCREENHEIGHT,width=SCREENWIDTH,image=self.gambar2)
         self.labelImage3=Label(self.frame3,height=self.sH*0.683,width=self.sW*0.312,image=self.historyPageImage)
         self.exitButton = Button(self.frame,command=self.exit,bg="#9561EB",text="EXIT",font='Helvetica 30 bold')
+        self.exitButton2 = Button(self.frame2,command=self.exit,bg="#9561EB",text="EXIT",font='Helvetica 20 bold')
         self.startButton = Button(self.frame,command=self.start,bg="#EF5858",text="START",font='Helvetica 30 bold')
         self.backBtn=Button(self.frame2,image=self.backImage,command=self.back)
         self.calculateBtn=Button(self.frame2,activebackground="#67B840",image=self.calculateImage,command=self.calculate,borderwidth=0,bg="#67B840")
@@ -250,6 +251,7 @@ class Page:
         self.defaultBtn.place(x=0.7395*self.sW,y=self.sH*0.3896,width=self.sW*0.0276,height=self.sH*0.14)
         self.helpBtn.place(x=0.962*self.sW,y=self.sH*0.0175,width=self.sW*0.026,height=self.sH*0.0488)
         self.historyBtn.place(x=0.892*self.sW,y=self.sH*0.0244,width=self.sW*0.062,height=self.sH*0.036)
+        self.exitButton2.place(x=0,y=0,width=100,height=100)
        
         j=0
         k=0
