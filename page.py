@@ -1,7 +1,6 @@
-from tkinter import *
-from tkinter import ttk
+#from tkinter import *
 from PIL import ImageTk, Image
-from tkinter import messagebox
+from tkinter import messagebox,ttk,Tk,Frame,Label,Button,Entry,PhotoImage,END,Toplevel,NW,CENTER
 import math
 import os
 import threading
@@ -235,16 +234,16 @@ class Page:
     def unloading(self):
         self.Giflabel.place_forget()
     def showLayar(self):
-        self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
-        self.labelImage.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+        self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
+        self.labelImage.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
         self.exitButton.place(x=self.sW*0.573 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
         self.startButton.place(x=self.sW*0.215 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
     def exit(self):
         root.destroy()
     def start(self):
         self.frame.place_forget()
-        self.frame2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
-        self.labelImage2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+        self.frame2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
+        self.labelImage2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
         self.backBtn.place(x=self.sW*0.01,y=self.sH*0.02,width=self.sW*0.032, height=self.sH*0.06)
         self.calculateBtn.place(x=self.sW*0.774,y=self.sH*0.39,width=self.sW*0.132, height=self.sH*0.06)
         self.resetBtn.place(x=self.sW*0.774,y=self.sH*0.47,width=self.sW*0.132, height=self.sH*0.06)
@@ -287,6 +286,8 @@ class Page:
         self.outLabel[4][3].place_forget()
    
         self.master.bind('<Return>',self.enter)
+        self.default()
+        self.calculate()
     def history(self):
         global vinMax,cnt
         a = len(vinMax)
@@ -307,7 +308,7 @@ class Page:
 
     def back(self):
         self.frame2.place_forget()
-        self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH,anchor=NW)
+        self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
         self.master.unbind('<Return>')
     def calculate(self):
         global vinMax,cnt
