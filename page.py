@@ -285,9 +285,10 @@ class Page:
 
         # self.outLabel[4][1].place_forget()
         # self.outLabel[3][3].place_forget()
-        self.outLabel[4][3].place_forget()
+        #self.outLabel[4][3].place_forget()
    
         self.master.bind('<Return>',self.enter)
+        self.reset()
         self.default()
         self.calculate()
     def history(self):
