@@ -107,7 +107,7 @@ class Page:
         self.frame=Frame(self.master,bg="RED")
         self.frame2=Frame(self.master,bg="RED")
         self.frame3=Frame(self.master,bg="#D7D3D3")
-        self.entry =[[0 for x in range(5)]  for x in range(5)]
+        self.entry =[[0 for x in range(6)]  for x in range(6)]
         self.outLabel =[[0 for x in range(5)]  for x in range(5)]
         self.btnHistory=[0 for x in range(88)]
         self.labelHistory=[0 for x in range(88)]   
@@ -176,7 +176,7 @@ class Page:
         self.historyBtn=Button(self.frame2,command=self.history,image=self.historyImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
         self.closeBtn=Button(self.frame3,command=self.close,image=self.closeImage,activebackground="#687BDC",bg="#687BDC",borderwidth=0)
         #self.entry[0][0]=Entry(self.frame2,font=20)
-        for x in range(5):
+        for x in range(6):
             for y in range(5):    
                 self.entry[x][y] = Entry(self.frame2,font=20)
         for j in range(5):
@@ -257,14 +257,14 @@ class Page:
         k=0
         x=0
         y=0
-        offsetH=self.sH*0.165
+        offsetH=self.sH*0.173
         offsetW=self.sW*0.181
         jarakW=self.sW*0.141
-        jarakH=self.sH*0.0292
+        jarakH=self.sH*0.0146
         entryWidth=self.sW*0.065
         entryHeight=self.sH*0.044
         
-        for j in range(5):
+        for j in range(6):
             for k in range(5):    
                 self.entry[j][k].place(x=offsetW+((k*(entryWidth+jarakW))),y=offsetH+((j*(entryHeight+jarakH))),width=entryWidth,height=entryHeight)
         
@@ -282,6 +282,7 @@ class Page:
         #self.entry[2][3].place_forget()
         self.entry[3][3].place_forget()
         self.entry[4][3].place_forget()
+        self.entry[5][3].place_forget()
 
         # self.outLabel[4][1].place_forget()
         # self.outLabel[3][3].place_forget()
