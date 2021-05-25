@@ -5,7 +5,12 @@ import math
 import os
 import threading
 import time
-
+tfall=[]
+splitL=[]
+splitP=[]
+wireLengthTolerance=[]
+additionalWinding=[]
+effesiensi=[]
 vinMax=[]
 vinMin=[]
 vOut=[]
@@ -23,7 +28,6 @@ bMax=[]
 j=[]
 s=[]
 sigma_split=[]
-tfall=[]
 cnt=0
 
 fulltext=[0 for x in range(88)]  
@@ -348,22 +352,25 @@ class Page:
                 fulltext[x]="vinMax="+str(vinMax[x])+"v"+" vinMin="+str(vinMin[x])+"v"+" vOut="+str(vOut[x])+"v"+" Iout="+str(iOut[x])+"A"+" D="+str(duty[x])+"%"+" f="+str(frekuensi[x])+"kHz"+" rIl="+str(rIl[x])+"%"+" rVo="+str(rVo[x])+"%"+" Vf="+str(Vf[x])+"volt"+" ac_ind="+str(ac_ind[x])+"cm2"+" dBob_ind="+str(dBob_ind[x])+"mm"+" ac_trafo="+str(ac_trafo[x])+"cm2"
                 self.labelHistory[x].config(text=splitter(fulltext[x],50))
     def reset(self):
-        for x in range(5):
+        for x in range(6):
             for y in range(5):
                 self.entry[x][y].delete(0,END)
     def hitung(self):
-        global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
+        global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext,effesiensi,additionalWinding,wireLengthTolerance,splitL,splitP
         
         self.vinMax=float(self.entry[0][0].get())
-        self.vinMin=float(self.entry[1][0].get())
+        self.effesiensi=float(self.entry[1][0].get())
         self.vOut=float(self.entry[2][0].get())
         self.iOut=float(self.entry[3][0].get())
         self.duty=float(self.entry[4][0].get())
+        self.tfall=float(self.entry[5][0].get())
         vinMax.insert(0,self.vinMax)
         vinMin.insert(0,self.vinMin)
+        effesiensi.insert(0,self.effesiensi)
         vOut.insert(0,self.vOut)
         iOut.insert(0,self.iOut)
         duty.insert(0,self.duty)
+        tfall.insert(0,self.tfall)
 
 
 
@@ -372,11 +379,13 @@ class Page:
         self.rVo=float(self.entry[2][1].get())
         self.vf=float(self.entry[3][1].get())
         self.acInd=float(self.entry[4][1].get())
+        self.additionalWInding=float(self.entry[5][1].get())
         frekuensi.insert(0,self.frekuensi)
         rIl.insert(0,self.rIl)
         rVo.insert(0,self.rVo)
         Vf.insert(0,self.vf)
         ac_ind.insert(0,self.acInd)
+        additionalWinding.insert(0,self.additionalWInding)
         
 
 
@@ -385,20 +394,24 @@ class Page:
         self.dBobTraf=float(self.entry[2][2].get())
         self.bMax=float(self.entry[3][2].get())
         self.J=float(self.entry[4][2].get())
+        self.wireLengthTolerance=float(self.entry[5][2].get())
         dBob_ind.insert(0,self.dBobInd)
         ac_trafo.insert(0,self.acTraf)
         dBob_trafo.insert(0,self.dBobTraf)
         bMax.insert(0,self.bMax)
         j.insert(0,self.J)
+        wireLengthTolerance.insert(0,self.wireLengthTolerance)
+        self.dBobTraf=self.dBobTraf*0.1
 
+        self.splitP=float(self.entry[0][3].get())
+        self.splitL=float(self.entry[1][3].get())
+        # self.tfall=float(self.entry[2][3].get())
 
-        self.s=float(self.entry[0][3].get())
-        self.sigmaSplit=float(self.entry[1][3].get())
-        self.tfall=float(self.entry[2][3].get())
-        s.insert(0,self.s)
-        sigma_split.insert(0,self.sigmaSplit)
-        tfall.insert(0,self.tfall)
+        splitP.insert(0,self.splitP)
+        splitL.insert(0,self.splitL)
+        # tfall.insert(0,self.tfall)
         
+        self.s=4.5
         #RUMUS
         self.duty=self.duty/100
         self.frekuensi=self.frekuensi*1000
@@ -422,10 +435,14 @@ class Page:
 
         #winding number
         self.n=((self.Lx*self.iL_max)/(self.bMax*self.acInd))*pow(10,4)
-        
+        #airgap
+        self.airGap=((4*3.14*0.0000001*self.Lx*math.pow(self.iL_max,2))/(math.pow(self.bMax,2)*self.acInd))*10000
         #wire size
+        self.iL_rms_split=self.iL_avg/self.splitL
+        self.qwL_split=self.iL_rms_split/self.J
+        self.dwL_split=math.sqrt(4*self.qwL_split/3.14)
         self.kBobInd = 3.14*self.dBobInd
-        self.wireLength = (self.n*self.kBobInd*self.sigmaSplit)+(0.4*(self.n*self.kBobInd*self.sigmaSplit))
+        self.wireLength = (self.n*self.kBobInd*self.splitL)+(0.4*(self.n*self.kBobInd*self.splitL))
       
 
         #mulai trafo
@@ -438,16 +455,29 @@ class Page:
         #I1(rms)dan I2(rms)
         self.I1_rms=self.rasio*self.iOut*math.sqrt(self.duty)
         self.I2_rms=0.5*self.iOut*math.sqrt(self.duty+1)
-        #d1 dan d2
-        self.d1=math.sqrt((4*self.I1_rms)/(3.14*self.s))
-        self.d2=math.sqrt((4*self.I2_rms)/(3.14*self.s))
-        #wire lengh trafo
-        self.kBobTraf=3.14*self.dBobTraf
-        self.length_p=(self.N1*self.kBobTraf*self.sigmaSplit)+(0.3*(self.N1*self.kBobTraf*self.sigmaSplit))
-        self.length_s=(self.N2*self.kBobTraf*self.sigmaSplit)+(0.3*(self.N2*self.kBobTraf*self.sigmaSplit))
+        # #d1 dan d2
+        # self.d1=math.sqrt((4*self.I1_rms)/(3.14*self.s))
+        # self.d2=math.sqrt((4*self.I2_rms)/(3.14*self.s))
+
         #R
         self.R=self.vOut/self.iOut
+        #d1/dw primer
+        self.i1_rms_split=self.I1_rms/self.splitP
+        self.qwp_split=self.i1_rms_split/self.J
+        self.dwp_split=math.sqrt(4*self.qwp_split/3.14)
+        #split sekunder
+        self.dws_split=self.dwp_split
 
+        self.qws_split=(pow(self.dws_split,2)*3.14)/4
+        self.I2_rms_split=self.J*self.qws_split
+        self.splitS=self.I2_rms/self.I2_rms_split
+        # print(self.I2_rms)
+        # print(self.qws_split)
+        #wire lengh trafo
+        self.kBobTraf=3.14*self.dBobTraf
+        self.length_p=(self.N1*self.kBobTraf*self.splitP)+(0.3*(self.N1*self.kBobTraf*self.splitP))
+        self.length_s=(self.N2*self.kBobTraf*self.splitS)+(0.3*(self.N2*self.kBobTraf*self.splitS))
+        self.totalLength=self.length_p+self.length_s
         #Co
         self.dVo=self.rVo*self.vOut
         self.Co=((1-self.duty)/(8*self.Lx*pow(2*self.frekuensi,2)))*(self.vOut/self.dVo)
@@ -460,28 +490,36 @@ class Page:
 
         self.Lx=self.Lx*1000000
         self.Co=self.Co*1000000
-        self.length_p=self.length_p/10#dijadikan cm
-        self.length_s=self.length_s/10
+        self.length_p=self.length_p
+        self.length_s=self.length_s
         self.Cs=self.Cs*1000000000
-        self.outLabel[3][1].config(text="{:.2f}".format(self.Lx))
-        self.outLabel[4][0].config(text="{:.2f}".format(self.iL_avg))
-        self.outLabel[0][1].config(text="{:.2f}".format(self.iL_max))
-        self.outLabel[3][0].config(text="{:.2f}".format(self.n))
-        self.outLabel[1][0].config(text="{:.2f}".format(self.wireLength))
-        self.outLabel[0][2].config(text="{:.2f}".format(self.N1))
-        self.outLabel[1][2].config(text="{:.2f}".format(self.N2))
-        self.outLabel[2][2].config(text="{:.2f}".format(self.I1_rms))
-        self.outLabel[3][2].config(text="{:.2f}".format(self.I2_rms))
-        self.outLabel[4][2].config(text="{:.2f}".format(self.d1))
-        self.outLabel[0][3].config(text="{:.2f}".format(self.d2))
-        self.outLabel[1][1].config(text="{:.2f}".format(self.kBobInd))
-        self.outLabel[2][0].config(text="{:.2f}".format(self.R))
-        self.outLabel[2][1].config(text="{:.2f}".format(self.Co))
+
+        self.outLabel[0][0].config(text="{:.2f}".format(self.rasio))
+        #LMself.outLabel[1][0].config(text="{:.2f}".format(self.wireLength))
+        self.outLabel[2][0].config(text="{:.2f}".format(math.ceil(self.N1)))
+        self.outLabel[3][0].config(text="{:.2f}".format(math.ceil(self.N2)))
+        self.outLabel[4][0].config(text="{:.2f}".format(math.ceil(self.splitS)))
+
+        self.outLabel[0][1].config(text="{:.2f}".format(self.dwp_split))
+        self.outLabel[1][1].config(text="{:.2f}".format(self.kBobTraf))
+        self.outLabel[2][1].config(text="{:.2f}".format(self.length_p))
+        self.outLabel[3][1].config(text="{:.2f}".format(self.length_s))
+        self.outLabel[4][1].config(text="{:.2f}".format(self.totalLength))
+        # print(self.length_p)
+        # print(self.length_s)
+        
+        
+        self.outLabel[0][2].config(text="{:.2f}".format(self.Lx))
+        self.outLabel[1][2].config(text="{:.2f}".format(math.ceil(self.n)))
+        self.outLabel[2][2].config(text="{:.4f}".format(self.airGap))
+        self.outLabel[3][2].config(text="{:.2f}".format(self.dwL_split))
+        self.outLabel[4][2].config(text="{:.2f}".format(self.wireLength))
+        
+        self.outLabel[0][3].config(text="{:.2f}".format(self.Co)) 
         self.outLabel[1][3].config(text="{:.2f}".format(self.length_p))
         self.outLabel[2][3].config(text="{:.2f}".format(self.length_s))
-        self.outLabel[4][1].config(text="{:.2f}".format(self.Rs))
         self.outLabel[3][3].config(text="{:.2f}".format(self.Cs))
-        self.outLabel[0][0].config(text="{:.2f}".format(self.rasio))
+        self.outLabel[4][3].config(text="{:.2f}".format(self.Rs))
         cnt=cnt+1
 
     
@@ -497,6 +535,8 @@ class Page:
         self.entry[3][0].insert(0,str(self.iOut))
         self.duty=40
         self.entry[4][0].insert(0,str(self.duty))
+        self.tfall=75
+        self.entry[5][0].insert(0,str(self.tfall))
 
         self.frekuensi=40
         self.entry[0][1].insert(0,str(self.frekuensi))
@@ -504,10 +544,13 @@ class Page:
         self.entry[1][1].insert(0,str(self.rIl))
         self.rVo=0.1
         self.entry[2][1].insert(0,str(self.rVo))
-        self.vf=1.2
+        self.vf=1.5
         self.entry[3][1].insert(0,str(self.vf))
         self.acInd=1.61
         self.entry[4][1].insert(0,str(self.acInd))
+        self.additionalWInding=3
+        self.entry[5][1].insert(0,str(self.additionalWInding))
+
 
         self.dBobInd=16
         self.entry[0][2].insert(0,str(self.dBobInd))
@@ -519,12 +562,14 @@ class Page:
         self.entry[3][2].insert(0,str(self.bMax))
         self.J=4.5
         self.entry[4][2].insert(0,str(self.J))
+        self.wireLengthTolerance=30
+        self.entry[5][2].insert(0,str(self.wireLengthTolerance))
 
-        self.s=4.5
-        self.entry[0][3].insert(0,str(self.s))
-        self.sigmaSplit=10
-        self.entry[1][3].insert(0,str(self.sigmaSplit))
-        self.tfall=75
+        self.splitP=2
+        self.entry[0][3].insert(0,str(self.splitP))
+        self.splitL=10
+        self.entry[1][3].insert(0,str(self.splitL))
+        self.tfall=25
         self.entry[2][3].insert(0,str(self.tfall))
 screen = Page(root)
 
