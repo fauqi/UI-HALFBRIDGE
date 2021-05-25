@@ -194,19 +194,22 @@ class Page:
             self.labelHistory[z]=Label(self.frame3,bg="WHITE",borderwidth=0)  
         self.show_historyPage()
     def btnHistory_func(self,x):
-        global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
+        global splitL,splitP,wireLengthTolerance,additionalWinding,vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
         
         self.reset()
         self.vinMax=vinMax[x]
         self.entry[0][0].insert(0,str(self.vinMax))
-        self.vinMin=vinMin[x]
-        self.entry[1][0].insert(0,str(self.vinMin))
+        self.effesiensi=effesiensi[x]
+        self.entry[1][0].insert(0,str(self.effesiensi))
         self.vOut=vOut[x]
         self.entry[2][0].insert(0,str(self.vOut))
         self.iOut=iOut[x]
         self.entry[3][0].insert(0,str(self.iOut))
         self.duty=duty[x]
         self.entry[4][0].insert(0,str(self.duty))
+        self.tfall=tfall[x]
+        self.entry[5][0].insert(0,str(self.tfall))
+        
 
         self.frekuensi=frekuensi[x]
         self.entry[0][1].insert(0,str(self.frekuensi))
@@ -218,6 +221,8 @@ class Page:
         self.entry[3][1].insert(0,str(self.vf))
         self.acInd=ac_ind[x]
         self.entry[4][1].insert(0,str(self.acInd))
+        self.additionalWInding=additionalWinding[x]
+        self.entry[5][1].insert(0,str(self.additionalWInding))
 
         self.dBobInd=dBob_ind[x]
         self.entry[0][2].insert(0,str(self.dBobInd))
@@ -229,13 +234,15 @@ class Page:
         self.entry[3][2].insert(0,str(self.bMax))
         self.J=j[x]
         self.entry[4][2].insert(0,str(self.J))
+        self.wireLengthTolerance=wireLengthTolerance[x]
+        self.entry[5][2].insert(0,str(self.wireLengthTolerance))
 
-        self.s=s[x]
-        self.entry[0][3].insert(0,str(self.s))
-        self.sigmaSplit=sigma_split[x]
-        self.entry[1][3].insert(0,str(self.sigmaSplit))
-        self.tfall=tfall[x]
-        self.entry[2][3].insert(0,str(self.tfall))
+        self.splitP=splitP[x]
+        self.entry[0][3].insert(0,str(self.splitP))
+        self.splitL=splitL[x]
+        self.entry[1][3].insert(0,str(self.splitL))
+        # self.tfall=tfall[x]
+        # self.entry[2][3].insert(0,str(self.tfall))
     def close(self):
         self.frame3.place_forget()
     def unloading(self):
@@ -349,8 +356,8 @@ class Page:
             if x < 6:
                 self.btnHistory[x].place(x=offsetW,y=offsetH+(x*(jarak+height)),width=width,height=height)
                 self.labelHistory[x].place(x=offsetW2,y=offsetH2+(x*(jarak2+height2)),width=width2,height=height2)
-                fulltext[x]="vinMax="+str(vinMax[x])+"v"+" vinMin="+str(vinMin[x])+"v"+" vOut="+str(vOut[x])+"v"+" Iout="+str(iOut[x])+"A"+" D="+str(duty[x])+"%"+" f="+str(frekuensi[x])+"kHz"+" rIl="+str(rIl[x])+"%"+" rVo="+str(rVo[x])+"%"+" Vf="+str(Vf[x])+"volt"+" ac_ind="+str(ac_ind[x])+"cm2"+" dBob_ind="+str(dBob_ind[x])+"mm"+" ac_trafo="+str(ac_trafo[x])+"cm2"
-                self.labelHistory[x].config(text=splitter(fulltext[x],50))
+                fulltext[x]="vin="+str(vinMax[x])+"v"+" eff="+str(effesiensi[x])+"%"+" vOut="+str(vOut[x])+"v"+"Iout="+str(iOut[x])+"A"+" D="+str(duty[x])+"%"+" tfall="+str(tfall[x])+"ns"+" f="+str(frekuensi[x])+"kHz"+" rIl="+str(rIl[x])+"%"+" rVo="+str(rVo[x])+"%"+" Vf="+str(Vf[x])+"volt"+" ac_ind="+str(ac_ind[x])+"cm2"+" dBob_ind="+str(dBob_ind[x])
+                self.labelHistory[x].config(text=splitter(fulltext[x],45))
     def reset(self):
         for x in range(6):
             for y in range(5):
@@ -519,8 +526,8 @@ class Page:
         self.outLabel[0][3].config(text="{:.2f}".format(math.ceil(self.Co))) 
         self.outLabel[1][3].config(text="{:.2f}".format(self.ion))
         self.outLabel[2][3].config(text="{:.2f}".format(self.voff))
-        self.outLabel[3][3].config(text="{:.2f}".format(self.Cs))
-        self.outLabel[4][3].config(text="{:.2f}".format(self.Rs))
+        self.outLabel[3][3].config(text="{:.2f}".format(math.ceil(self.Cs)))
+        self.outLabel[4][3].config(text="{:.2f}".format(math.ceil(self.Rs)))
         cnt=cnt+1
 
     
