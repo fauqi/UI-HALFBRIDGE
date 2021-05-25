@@ -442,7 +442,7 @@ class Page:
         self.qwL_split=self.iL_rms_split/self.J
         self.dwL_split=math.sqrt(4*self.qwL_split/3.14)
         self.kBobInd = 3.14*self.dBobInd
-        self.wireLength = (self.n*self.kBobInd*self.splitL)+(0.4*(self.n*self.kBobInd*self.splitL))
+        self.wireLength = (math.ceil(self.n)*self.kBobInd*self.splitL)+(0.4*(self.n*self.kBobInd*self.splitL))
       
 
         #mulai trafo
@@ -483,8 +483,9 @@ class Page:
         self.Co=((1-self.duty)/(8*self.Lx*pow(2*self.frekuensi,2)))*(self.vOut/self.dVo)
 
         #Rs dan Cs
+        self.ion=self.iOut
         self.voff=(self.vinMax/2)-(self.Lx*(self.dIlx/(self.duty*self.T)))-self.vOut
-        self.Cs = (self.iOut*self.tfall)/(2*self.voff)
+        self.Cs = (self.ion*self.tfall)/(2*self.voff)
     
         self.Rs=(self.duty*self.T)/(2*self.Cs)
 
@@ -515,9 +516,9 @@ class Page:
         self.outLabel[3][2].config(text="{:.2f}".format(self.dwL_split))
         self.outLabel[4][2].config(text="{:.2f}".format(self.wireLength))
         
-        self.outLabel[0][3].config(text="{:.2f}".format(self.Co)) 
-        self.outLabel[1][3].config(text="{:.2f}".format(self.length_p))
-        self.outLabel[2][3].config(text="{:.2f}".format(self.length_s))
+        self.outLabel[0][3].config(text="{:.2f}".format(math.ceil(self.Co))) 
+        self.outLabel[1][3].config(text="{:.2f}".format(self.ion))
+        self.outLabel[2][3].config(text="{:.2f}".format(self.voff))
         self.outLabel[3][3].config(text="{:.2f}".format(self.Cs))
         self.outLabel[4][3].config(text="{:.2f}".format(self.Rs))
         cnt=cnt+1
