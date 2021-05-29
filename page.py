@@ -184,10 +184,10 @@ class Page:
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(6):
             for y in range(5):    
-                self.entry[x][y] = Entry(self.frame2,font=20)
+                self.entry[x][y] = Entry(self.frame2,font='Helvetica 13 bold',justify='center')
         for j in range(5):
             for k in range(5):    
-                self.outLabel[j][k] = Label(self.frame2,font=20,bg="#7BD152")
+                self.outLabel[j][k] = Label(self.frame2,font='Helvetica 13 bold',bg="#7BD152")
         for z in range(80):
             self.btnHistory[z]=Button(self.frame3,image=self.historyBarImage,bg="#D7D3D3",borderwidth=0,activebackground="#D7D3D3")
             self.btnHistory[z].config(command=lambda x=z:self.btnHistory_func(x))
@@ -444,6 +444,7 @@ class Page:
         self.n=((self.Lx*self.iL_max)/(self.bMax*self.acInd))*pow(10,4)
         #airgap
         self.airGap=((4*3.14*0.0000001*self.Lx*math.pow(self.iL_max,2))/(math.pow(self.bMax,2)*self.acInd))*10000
+        print(self.Lx)
         #wire size
         self.iL_rms_split=self.iL_avg/self.splitL
         self.qwL_split=self.iL_rms_split/self.J
@@ -488,51 +489,55 @@ class Page:
         #Co
         self.dVo=self.rVo*self.vOut
         self.Co=((1-self.duty)/(8*self.Lx*pow(2*self.frekuensi,2)))*(self.vOut/self.dVo)
-
+        #LM
+        self.Lm=((self.vin_a*self.duty*self.T)/(0.2*(self.I1_rms+(self.rasio*self.I2_rms))))
         #Rs dan Cs
         self.ion=self.iOut
         self.voff=(self.vinMax/2)-(self.Lx*(self.dIlx/(self.duty*self.T)))-self.vOut
         self.Cs = (self.ion*self.tfall)/(2*self.voff)
     
         self.Rs=(self.duty*self.T)/(2*self.Cs)
-
+        self.Lm=self.Lm*1000000
         self.Lx=self.Lx*1000000
         self.Co=self.Co*1000000
-        self.length_p=self.length_p
-        self.length_s=self.length_s
+        self.length_p=self.length_p/100
+        self.length_s=self.length_s/100
+        self.totalLength=self.totalLength/100
+        self.wireLength=self.wireLength/100
         self.Cs=self.Cs*1000000000
+        self.airGap=self.airGap*1000
 
         self.outLabel[0][0].config(text="{:.2f}".format(self.rasio))
-        #LMself.outLabel[1][0].config(text="{:.2f}".format(self.wireLength))
-        self.outLabel[2][0].config(text="{:.2f}".format(math.ceil(self.N1)))
-        self.outLabel[3][0].config(text="{:.2f}".format(math.ceil(self.N2)))
-        self.outLabel[4][0].config(text="{:.2f}".format(math.ceil(self.splitS)))
+        self.outLabel[1][0].config(text="{:.0f}".format(math.ceil(self.Lm)))
+        self.outLabel[2][0].config(text="{:.0f}".format(math.ceil(self.N1)))
+        self.outLabel[3][0].config(text="{:.0f}".format(math.ceil(self.N2)))
+        self.outLabel[4][0].config(text="{:.0f}".format(math.ceil(self.splitS)))
 
         self.outLabel[0][1].config(text="{:.2f}".format(self.dwp_split))
         self.outLabel[1][1].config(text="{:.2f}".format(self.kBobTraf))
-        self.outLabel[2][1].config(text="{:.2f}".format(self.length_p))
-        self.outLabel[3][1].config(text="{:.2f}".format(self.length_s))
-        self.outLabel[4][1].config(text="{:.2f}".format(self.totalLength))
+        self.outLabel[2][1].config(text="{:.0f}".format(math.ceil(self.length_p)))
+        self.outLabel[3][1].config(text="{:.0f}".format(math.ceil(self.length_s)))
+        self.outLabel[4][1].config(text="{:.0f}".format(math.ceil(self.totalLength)))
         # print(self.length_p)
         # print(self.length_s)
         
         
-        self.outLabel[0][2].config(text="{:.2f}".format(self.Lx))
-        self.outLabel[1][2].config(text="{:.2f}".format(math.ceil(self.n)))
+        self.outLabel[0][2].config(text="{:.0f}".format(math.ceil(self.Lx)))
+        self.outLabel[1][2].config(text="{:.0f}".format(math.ceil(self.n)))
         self.outLabel[2][2].config(text="{:.4f}".format(self.airGap))
         self.outLabel[3][2].config(text="{:.2f}".format(self.dwL_split))
-        self.outLabel[4][2].config(text="{:.2f}".format(self.wireLength))
+        self.outLabel[4][2].config(text="{:.0f}".format(math.ceil(self.wireLength)))
         
-        self.outLabel[0][3].config(text="{:.2f}".format(math.ceil(self.Co))) 
+        self.outLabel[0][3].config(text="{:.0f}".format(math.ceil(self.Co))) 
         self.outLabel[1][3].config(text="{:.2f}".format(self.ion))
         self.outLabel[2][3].config(text="{:.2f}".format(self.voff))
-        self.outLabel[3][3].config(text="{:.2f}".format(math.ceil(self.Cs)))
-        self.outLabel[4][3].config(text="{:.2f}".format(math.ceil(self.Rs)))
+        self.outLabel[3][3].config(text="{:.0f}".format(math.ceil(self.Cs)))
+        self.outLabel[4][3].config(text="{:.0f}".format(math.ceil(self.Rs)))
         cnt=cnt+1
 
     
     def default(self):
-        
+        self.reset()
         self.vinMax=100
         self.entry[0][0].insert(0,str(self.vinMax))
         self.vinMin=100
@@ -573,9 +578,9 @@ class Page:
         self.wireLengthTolerance=30
         self.entry[5][2].insert(0,str(self.wireLengthTolerance))
 
-        self.splitP=2
+        self.splitP=1.6
         self.entry[0][3].insert(0,str(self.splitP))
-        self.splitL=10
+        self.splitL=9.6
         self.entry[1][3].insert(0,str(self.splitL))
         self.tfall=25
         self.entry[2][3].insert(0,str(self.tfall))
