@@ -78,7 +78,7 @@ class FullScreenApp(object):
         if self.flag==0:
             self.master.overrideredirect(False)
             self.flag=1
-            scaleH=0.9259
+            scaleH=0.9
     
 
         else:
@@ -362,6 +362,9 @@ class Page:
         for x in range(6):
             for y in range(5):
                 self.entry[x][y].delete(0,END)
+        for x in range(5):
+            for y in range(5):    
+                self.outLabel[x][y].config(text="")
     def hitung(self):
         global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext,effesiensi,additionalWinding,wireLengthTolerance,splitL,splitP
         
@@ -502,7 +505,8 @@ class Page:
         self.Co=self.Co*1000000
         self.length_p=self.length_p/100
         self.length_s=self.length_s/100
-        self.totalLength=self.totalLength/100
+        self.totalLength=math.ceil(self.length_p)+math.ceil(self.length_s)
+        print(self.length_s)
         self.wireLength=self.wireLength/100
         self.Cs=self.Cs*1000000000
         self.airGap=self.airGap*1000
