@@ -5,6 +5,9 @@ import math
 import os
 import threading
 import time
+import subprocess
+
+windowPage=0
 tfall=[]
 splitL=[]
 splitP=[]
@@ -75,16 +78,16 @@ class FullScreenApp(object):
         master.bind('<f>',self.full)      
     def escape(self,event):
         global SCREENHEIGHT,SCREENWIDTH,scaleH,scaleW
-        if self.flag==0:
-            self.master.overrideredirect(False)
-            self.flag=1
-            scaleH=0.9
-    
+        # if self.flag==0:
+        self.master.overrideredirect(False)
+        self.flag=1
+        scaleH=0.9
 
-        else:
-            self.master.overrideredirect(True)
-            self.flag=0
-            scaleH=1
+
+        # else:
+        #     self.master.overrideredirect(True)
+        #     self.flag=0
+        #     scaleH=1
             
         Page(root)
         
@@ -123,7 +126,7 @@ class Page:
         global proc
         threadPdf.clear()
         self.unloading()
-      
+
         # os._exit()
         #sys.exit()
     def page_init(self):
@@ -299,16 +302,22 @@ class Page:
     def unloading(self):
         self.Giflabel.place_forget()
     def showLayar(self):
-        self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
-        self.labelImage.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
-        self.exitButton.place(x=self.sW*0.573 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
-        self.startButton.place(x=self.sW*0.215 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
+        global windowPage
+        if windowPage==0:
+            self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
+            self.labelImage.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
+            self.exitButton.place(x=self.sW*0.573 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
+            self.startButton.place(x=self.sW*0.215 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
+        elif windowPage==1:
+            self.start()
     def exit(self):
         a=messagebox.askyesno(title="EXIT?",message="Apakah anda yakin ingin menutup aplikasi?")
         if a == True:
             root.destroy()
         
     def start(self):
+        global windowPage
+        windowPage=1
         self.frame.place_forget()
         self.frame2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
         self.labelImage2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
@@ -379,6 +388,9 @@ class Page:
         
 
     def back(self):
+        global windowPage
+        windowPage=0
+        self.showLayar()
         self.frame2.place_forget()
         self.frame.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
         self.master.unbind('<Return>')
@@ -674,6 +686,8 @@ class Page2:
         self.a=int(0.55*screen.sW)
         self.help.geometry("%dx%d+%d+0" % (int(screen.sW*0.44), int(screen.sH*0.9),self.a))
         self.frame=Frame(self.help)
+        self.help.resizable(0,0)
+        self.help.attributes('-toolwindow', True)
         #root.after(0,loadGif)
         self.page_init()
         self.show()
@@ -697,12 +711,14 @@ class Page2:
         self.help.mainloop()
     def pdf(self):
         global flag
+        
         if flag == 0:
             self.help.after(0,loadGif)
             threadPdf.set()
             flag=1
         else:
             messagebox.showerror("warning","File PDF MANUAL CALCULATION SUDAH TERBUKA SILAHKAN CEK PADA TASKBAR ANDA")
+        app.escape(root)
 def kill():
     
     screen.unloading()
@@ -713,8 +729,9 @@ def timer():
 
         if threadPdf.is_set():
             threadPdf.clear()
-            screen.frame.after(1000,kill)
-            os.system("pdf.pdf")
+            #screen.frame.after(1000,kill)
+            # os.open("pdf.pdf")
+            subprocess.Popen(["pdf.pdf"], shell=True)
             flag=0
 
             
