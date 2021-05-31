@@ -179,7 +179,7 @@ class Page:
         self.helpBtn=Button(self.frame2,command=self.help,image=self.helpImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
         self.historyBtn=Button(self.frame2,command=self.history,image=self.historyImage,activebackground="#40AD0C",bg="#40AD0C",borderwidth=0)
         self.closeBtn=Button(self.frame3,command=self.close,image=self.closeImage,activebackground="#687BDC",bg="#687BDC",borderwidth=0)
-        
+        self.rekomBtn=Button(self.frame2,text="CEK REKOMENDASI",command=self.popRekomen)
         
         #self.entry[0][0]=Entry(self.frame2,font=20)
         for x in range(6):
@@ -193,6 +193,57 @@ class Page:
             self.btnHistory[z].config(command=lambda x=z:self.btnHistory_func(x))
             self.labelHistory[z]=Label(self.frame3,bg="WHITE",borderwidth=0)  
         self.show_historyPage()
+    def popRekomen(self):
+               # print(self.rekom(self.Co,self.vOut,1))
+        
+        # print(self.rekom(self.Cs,1000,3))
+        try:
+            text="Co="+self.rekom(self.Co,self.vOut,1)+"\n"+"Cs="+self.rekom(self.Cs,1000,3)+"\nRs="+self.rekom(self.Rs,10,2)
+            messagebox.showinfo(title="REKOMENDASI", message=text)
+        except:
+            messagebox.showerror(title="ERROR DETECTED!",message="rating terlalu besar, pastikan sudah memasukkan parameter dengan benar")
+    def rekom(self,nilai,rate,flag):
+        self.dataCo=[0.1,0.22,0.33,0.47,1,2.2,3.3,4.7,10,22,33,47,100,220,330,470,1000,2200,3300]
+        self.voltrate=[10,16,35,50,63,100,250,400,500,1000,2000,3000,4000]
+        self.resistor=[0.1,0.12,0.15,0.18,0.2,0.22,1,1.2,1.5,1.8,2,2.2,2.7,3.3,3.9,4.7,5.1,5.6,6.8,8.2,10,12,15,18,22,27,33,39,47,56,68,75,82,100,120,150,180,220,270,330,390,470,560,680,820,1000,1200,1500,1800,2200,2700,3300,3900,4700,5600,6800]
+        self.resistorRate=[0.25,0.5,9,10,11,13,14,15,16,17]
+        if flag==1:
+            for x in self.dataCo:
+                if x>=nilai:
+                    hasil=x
+                    break
+            for y in self.voltrate:
+                if y >= 2*rate:
+                    rating=y
+                    break
+                    
+            result=str(hasil)+"mikro Farad"+","+str(rating)+"volt"
+
+        elif flag==2:
+            for x in self.resistor:
+                if x>=nilai/2:
+                    hasil=x
+                    break
+            for y in self.resistorRate:
+                if y>=rate:
+                    rating=y
+                    break
+            result=str(hasil)+"ohm"+","+str(rating)+"watt"
+        elif flag==3:
+            for x in self.dataCo:
+                if x>=nilai:
+                    hasil=x
+                    break
+            for y in self.voltrate:
+                if y >=rate:
+                    rating=y
+                    break
+            result=str(hasil)+"nano Farad"+","+str(rating)+"volt"            
+        return result
+
+            
+        
+
     def btnHistory_func(self,x):
         global splitL,splitP,wireLengthTolerance,additionalWinding,vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext
         
@@ -253,7 +304,10 @@ class Page:
         self.exitButton.place(x=self.sW*0.573 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
         self.startButton.place(x=self.sW*0.215 ,y=self.sH*0.77,width=self.sW*0.251,height=self.sH*0.1)
     def exit(self):
-        root.destroy()
+        a=messagebox.askyesno(title="EXIT?",message="Apakah anda yakin ingin menutup aplikasi?")
+        if a == True:
+            root.destroy()
+        
     def start(self):
         self.frame.place_forget()
         self.frame2.place(x=0,y=0,height=SCREENHEIGHT,width=SCREENWIDTH)
@@ -265,6 +319,7 @@ class Page:
         self.helpBtn.place(x=0.962*self.sW,y=self.sH*0.0175,width=self.sW*0.026,height=self.sH*0.0488)
         self.historyBtn.place(x=0.892*self.sW,y=self.sH*0.0244,width=self.sW*0.062,height=self.sH*0.036)
         self.exitButton2.place(x=0.77*self.sW,y=0.011*self.sH,width=0.09*self.sW,height=0.054*self.sH)
+        
        
         j=0
         k=0
@@ -365,6 +420,7 @@ class Page:
         for x in range(5):
             for y in range(5):    
                 self.outLabel[x][y].config(text="")
+        self.rekomBtn.place_forget()
     def hitung(self):
         global vinMax,vinMin,vOut,iOut,duty,frekuensi,rIl,rVo,Vf,ac_ind,dBob_ind,ac_trafo,dBob_trafo,bMax,j,s,sigma_split,tfall,cnt,fulltext,effesiensi,additionalWinding,wireLengthTolerance,splitL,splitP
         
@@ -506,13 +562,13 @@ class Page:
         self.length_p=self.length_p/100
         self.length_s=self.length_s/100
         self.totalLength=math.ceil(self.length_p)+math.ceil(self.length_s)
-        print(self.length_s)
+        # print(self.length_s)
         self.wireLength=self.wireLength/100
         self.Cs=self.Cs*1000000000
         self.airGap=self.airGap*1000
 
         self.outLabel[0][0].config(text="{:.2f}".format(self.rasio))
-        self.outLabel[1][0].config(text="{:.0f}".format(math.ceil(self.Lm)))
+        self.outLabel[1][0].config(text="-")
         self.outLabel[2][0].config(text="{:.0f}".format(math.ceil(self.N1)))
         self.outLabel[3][0].config(text="{:.0f}".format(math.ceil(self.N2)))
         self.outLabel[4][0].config(text="{:.0f}".format(math.ceil(self.splitS)))
@@ -538,7 +594,12 @@ class Page:
         self.outLabel[3][3].config(text="{:.0f}".format(math.ceil(self.Cs)))
         self.outLabel[4][3].config(text="{:.0f}".format(math.ceil(self.Rs)))
         cnt=cnt+1
-
+        # self.popRekomen()
+        self.rekomBtn.place(x=0.736*self.sW,y=self.sH*0.555,width=0.1234*self.sW,height=self.sH*0.0263)
+        # print(self.rekom(self.Co,self.vOut,1))
+        
+        # print(self.rekom(self.Cs,1000,3))
+        
     
     def default(self):
         self.reset()
