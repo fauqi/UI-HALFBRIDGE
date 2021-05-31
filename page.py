@@ -5,6 +5,9 @@ import math
 import os
 import threading
 import time
+import subprocess
+
+
 tfall=[]
 splitL=[]
 splitP=[]
@@ -713,8 +716,9 @@ def timer():
 
         if threadPdf.is_set():
             threadPdf.clear()
-            screen.frame.after(1000,kill)
-            os.system("pdf.pdf")
+            #screen.frame.after(1000,kill)
+            # os.open("pdf.pdf")
+            subprocess.Popen(["pdf.pdf"], shell=True)
             flag=0
 
             
