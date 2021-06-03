@@ -368,7 +368,7 @@ class Page:
         self.master.bind('<Return>',self.enter)
         self.reset()
         self.default()
-        self.calculate()
+        # self.calculate()
     def history(self):
         global vinMax,cnt
         a = len(vinMax)
@@ -580,7 +580,7 @@ class Page:
         self.airGap=self.airGap*1000
 
         self.outLabel[0][0].config(text="{:.2f}".format(self.rasio))
-        self.outLabel[1][0].config(text="-")
+        self.outLabel[1][0].config(text="{:.2f}".format(self.I2_rms))
         self.outLabel[2][0].config(text="{:.0f}".format(math.ceil(self.N1)))
         self.outLabel[3][0].config(text="{:.0f}".format(math.ceil(self.N2)))
         self.outLabel[4][0].config(text="{:.0f}".format(math.ceil(self.splitS)))
